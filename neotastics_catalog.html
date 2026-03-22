@@ -1,0 +1,1978 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neotastics - Video Catalogue</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── THEME VARIABLES ── */
+[data-theme="dark"]{
+  --bg:#050c14;--surface:#091422;--card:#0d1e30;--border:#1a3a5c;
+  --accent:#00b4ff;--text:#e0f0ff;--muted:#6a8faa;--overlay:rgba(0,0,0,.7);
+  --menu-bg:#091422;--shadow:rgba(0,0,0,.5);
+}
+[data-theme="light"]{
+  --bg:#f0f6ff;--surface:#ffffff;--card:#e8f0fc;--border:#b0c8e8;
+  --accent:#0077cc;--text:#0a1a2e;--muted:#4a6a8a;--overlay:rgba(0,0,0,.4);
+  --menu-bg:#ffffff;--shadow:rgba(0,0,0,.15);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:"DM Sans",sans-serif;min-height:100vh;transition:background .3s,color .3s}
+[data-theme="dark"] body{background-image:radial-gradient(circle at 20% 20%,rgba(0,100,200,.06) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(0,60,150,.05) 0%,transparent 50%)}
+
+/* ── HEADER ── */
+header{background:linear-gradient(135deg,var(--bg) 0%,var(--surface) 50%,var(--bg) 100%);border-bottom:2px solid var(--accent);padding:16px 28px 0;position:sticky;top:0;z-index:200;box-shadow:0 4px 40px rgba(0,180,255,.15)}
+.header-top{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+h1{font-family:"Bebas Neue",sans-serif;font-size:2.4rem;letter-spacing:3px;background:linear-gradient(90deg,#00b4ff,#4dd9ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.subtitle{color:var(--muted);font-size:.78rem;letter-spacing:1px;text-transform:uppercase}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.count-badge{background:var(--accent);color:#000;font-size:.75rem;font-weight:700;padding:4px 13px;border-radius:20px;letter-spacing:1px;white-space:nowrap}
+.save-btn{background:#0a2a0a;color:#4ade80;border:1px solid #1a4a1a;font-family:"DM Sans",sans-serif;font-size:.8rem;font-weight:700;padding:6px 14px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.save-btn:hover{background:#1a4a1a}
+
+/* ── THREE DOTS MENU ── */
+.dots-wrap{position:relative}
+.dots-btn{background:var(--card);border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:8px;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;transition:all .15s;letter-spacing:1px;line-height:1}
+.dots-btn:hover{border-color:var(--accent);color:var(--accent)}
+.dots-menu{display:none;position:absolute;top:calc(100% + 8px);left:0;background:var(--menu-bg);border:1px solid var(--border);border-radius:12px;padding:8px;min-width:200px;z-index:300;box-shadow:0 8px 32px var(--shadow)}
+.dots-menu.open{display:block}
+.dots-menu-item{display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;color:var(--text);font-family:"DM Sans",sans-serif;font-size:.85rem;font-weight:500;padding:9px 12px;border-radius:8px;cursor:pointer;text-align:left;transition:all .15s;white-space:nowrap}
+.dots-menu-item:hover{background:rgba(0,180,255,.08);color:var(--accent)}
+.dots-menu-item .item-icon{font-size:1rem;width:20px;text-align:center}
+.dots-divider{height:1px;background:var(--border);margin:6px 4px}
+
+/* ── PAGE TABS ── */
+.page-nav{display:flex;gap:4px}
+.page-tab{background:none;border:none;color:var(--muted);font-family:"DM Sans",sans-serif;font-size:.88rem;font-weight:600;padding:8px 18px;cursor:pointer;border-radius:8px 8px 0 0;border-bottom:3px solid transparent;transition:all .15s;letter-spacing:.5px}
+.page-tab:hover{color:var(--text);background:rgba(0,180,255,.05)}
+.page-tab.active{color:var(--accent);border-bottom-color:var(--accent);background:rgba(0,180,255,.08)}
+
+main{max-width:1140px;margin:0 auto;padding:24px 20px 80px}
+.page-section{display:none}
+.page-section.active{display:block}
+
+/* ── STATS BAR ── */
+.stats-bar{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:24px;padding:13px 18px;background:var(--surface);border-radius:10px;border:1px solid var(--border)}
+.stat{text-align:center}
+.stat-num{font-family:"Bebas Neue",sans-serif;font-size:1.5rem;color:var(--accent);display:block;line-height:1}
+.stat-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+
+/* ── CONTROLS ── */
+.controls-bar{display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
+.search-wrap{position:relative;flex:1;min-width:200px}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+input[type=text]{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 12px 8px 36px;border-radius:8px;font-family:"DM Sans",sans-serif;font-size:.88rem;outline:none;transition:border-color .2s}
+input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(0,180,255,.12)}
+input[type=text]::placeholder{color:var(--muted)}
+
+/* ── GAME DROPDOWN ── */
+.game-filter-wrap{position:relative}
+.game-filter-btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 16px;border-radius:8px;font-family:"DM Sans",sans-serif;font-size:.83rem;font-weight:600;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:8px;transition:all .15s}
+.game-filter-btn:hover,.game-filter-btn.open{border-color:var(--accent);color:var(--accent)}
+.game-filter-btn .arrow{font-size:.65rem;transition:transform .15s}
+.game-filter-btn.open .arrow{transform:rotate(180deg)}
+.game-dropdown-menu{display:none;position:absolute;top:calc(100% + 6px);left:0;background:var(--menu-bg);border:1px solid var(--border);border-radius:10px;padding:8px;min-width:200px;z-index:100;box-shadow:0 8px 32px var(--shadow)}
+.game-dropdown-menu.open{display:block}
+.game-option{display:block;width:100%;background:none;border:none;color:var(--muted);font-family:"DM Sans",sans-serif;font-size:.83rem;font-weight:500;padding:7px 12px;border-radius:6px;cursor:pointer;text-align:left;transition:all .15s}
+.game-option:hover{background:rgba(0,180,255,.08);color:var(--text)}
+.game-option.active{background:rgba(0,180,255,.12);color:var(--accent);font-weight:700}
+.toggle-btn{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:8px 14px;border-radius:8px;cursor:pointer;font-family:"DM Sans",sans-serif;font-size:.83rem;font-weight:500;transition:all .15s;white-space:nowrap}
+.toggle-btn:hover{border-color:#4ade80;color:#4ade80}
+.toggle-btn.active{background:#0a2500;border-color:#4ade80;color:#4ade80;font-weight:700}
+
+/* ── CATEGORY ── */
+.category-section{margin-bottom:32px}
+.category-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid var(--border)}
+.category-icon{font-size:1.2rem}
+.category-name{font-family:"Bebas Neue",sans-serif;font-size:1.25rem;letter-spacing:2px}
+.category-count{background:var(--surface);color:var(--muted);font-size:.7rem;padding:2px 8px;border-radius:12px;font-weight:600}
+
+/* ── VIDEO GRID ── */
+.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(275px,1fr));gap:9px}
+.video-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;transition:border-color .15s,transform .15s,box-shadow .15s;display:flex;align-items:flex-start;gap:10px}
+.video-card:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:0 6px 24px rgba(0,180,255,.15)}
+.card-num{font-family:"Bebas Neue",sans-serif;font-size:.95rem;color:var(--accent);min-width:26px;padding-top:1px;opacity:.6}
+.card-title{font-size:.84rem;font-weight:500;line-height:1.45;color:var(--text)}
+.card-title mark{background:rgba(0,180,255,.3);color:var(--text);border-radius:3px;padding:0 2px}
+.card-badges{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;align-items:center}
+.game-tag{display:inline-block;font-size:.68rem;font-weight:600;padding:2px 7px;border-radius:5px;letter-spacing:.3px}
+.action-btn{display:inline-flex;align-items:center;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:5px;cursor:pointer;transition:all .15s;font-family:"DM Sans",sans-serif;border:1px solid}
+.btn-domore{background:#0a2500;color:#4ade80;border-color:#1a4a00}
+.btn-domore:hover,.btn-domore.on{background:#1a4a00}
+.btn-approve{background:#051a08;color:#4ade80;border-color:#0a3a10}
+.btn-approve:hover{background:#0a3a10}
+.btn-unapprove{background:#1a0505;color:#f87171;border-color:#3a0a0a}
+.btn-unapprove:hover{background:#3a0a0a}
+
+/* ── IDEA / APPROVED / HIT CARDS ── */
+.video-card.idea-card{border-style:dashed;border-color:#3a0a0a;background:rgba(180,10,10,.06)}
+.video-card.idea-card:hover{border-color:#ff4444;box-shadow:0 6px 24px rgba(255,40,40,.18)}
+.ideas-header .category-name{color:#ff4444}
+.category-section.ideas-section{background:rgba(180,10,10,.04);border-radius:12px;padding:16px;border:1px solid #2a0808}
+.video-card.approved-card{border-style:dashed;border-color:#0a3a0a;background:rgba(10,180,10,.04)}
+.video-card.approved-card:hover{border-color:#4ade80;box-shadow:0 6px 24px rgba(40,255,80,.15)}
+.approved-header .category-name{color:#4ade80}
+.category-section.approved-section{background:rgba(10,180,10,.04);border-radius:12px;padding:16px;border:1px solid #0a2a0a}
+.video-card.hit-card{border-color:#b45309;background:rgba(180,100,0,.06)}
+.video-card.hit-card:hover{border-color:#f59e0b;box-shadow:0 6px 24px rgba(245,158,11,.2)}
+.hit-header .category-name{color:#f59e0b}
+.category-section.hit-section{background:rgba(180,120,0,.05);border-radius:12px;padding:16px;border:1px solid #3a2500}
+
+/* ── DUPLICATE WARNING ── */
+.dup-badge{display:inline-flex;align-items:center;font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:5px;background:#1a0a00;color:#fb923c;border:1px solid #7c3010;cursor:help}
+
+/* ── MATCH BADGE ── */
+.match-badge{display:inline-flex;align-items:center;font-size:.68rem;font-weight:800;padding:2px 8px;border-radius:5px;border:1px solid;letter-spacing:.5px}
+.match-high{background:#1a0e00;color:#f59e0b;border-color:#b45309}
+.match-mid{background:#0f1a00;color:#a3e635;border-color:#4d7a00}
+.match-low{background:rgba(0,0,0,.2);color:var(--muted);border-color:var(--border)}
+
+/* ── KEYWORDS BANNER ── */
+.keywords-banner{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:.78rem;color:var(--muted);line-height:1.8}
+.keywords-banner strong{color:var(--accent)}
+.kw-pill{display:inline-block;background:rgba(0,180,255,.1);color:var(--accent);border:1px solid rgba(0,180,255,.2);border-radius:12px;padding:1px 8px;margin:2px 3px;font-size:.72rem;font-weight:600}
+
+/* ── SUB TABS ── */
+.sub-tab-bar{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.sub-tab{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:7px 16px;border-radius:8px;cursor:pointer;font-family:"DM Sans",sans-serif;font-size:.82rem;font-weight:600;transition:all .15s}
+.sub-tab.active-ideas{background:#cc2222;border-color:#ff4444;color:#fff}
+.sub-tab.active-approved{background:#0a3a0a;border-color:#4ade80;color:#4ade80}
+.sub-tab.active-hit{background:#7c3500;border-color:#f59e0b;color:#f59e0b}
+.sub-tab.active-trending{background:#1a0a2a;border-color:#c084fc;color:#c084fc}
+
+/* ── TRENDING PANEL ── */
+.trending-panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:24px}
+.trending-panel h2{font-family:"Bebas Neue",sans-serif;font-size:1.3rem;letter-spacing:2px;color:#c084fc;margin-bottom:6px}
+.trending-panel p{font-size:.82rem;color:var(--muted);margin-bottom:16px;line-height:1.5}
+.trending-btn{background:linear-gradient(135deg,#4a0080,#7c00cc);color:#fff;border:none;padding:10px 22px;border-radius:8px;font-family:"DM Sans",sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:opacity .15s;margin-right:10px}
+.trending-btn:hover{opacity:.85}
+.trending-btn:disabled{opacity:.5;cursor:not-allowed}
+.trend-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.trend-link{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:8px;text-decoration:none;font-size:.82rem;font-weight:600;transition:all .15s}
+.trend-link:hover{border-color:var(--accent);color:var(--accent)}
+.trend-results{margin-top:20px}
+.trend-result-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px}
+.trend-result-card h3{font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:6px}
+.trend-result-card p{font-size:.78rem;color:var(--muted);line-height:1.5}
+.trend-tag{display:inline-block;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:12px;background:rgba(192,132,252,.15);color:#c084fc;border:1px solid rgba(192,132,252,.3);margin-right:5px;margin-bottom:4px}
+.trend-match-btn{background:rgba(192,132,252,.15);color:#c084fc;border:1px solid rgba(192,132,252,.3);font-family:"DM Sans",sans-serif;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:5px;cursor:pointer;margin-top:8px;transition:all .15s}
+.trend-match-btn:hover{background:rgba(192,132,252,.25)}
+.trending-spinner{display:none;text-align:center;padding:30px;color:var(--muted);font-size:.88rem}
+
+/* ── GAME TAGS ── */
+.tag-teardown{background:#0a1e2a;color:#ff9800;border:1px solid #1a3a4a}
+.tag-stormworks{background:#061828;color:#4fc3f7;border:1px solid #0a2a3a}
+.tag-roblox{background:#0e1228;color:#a78bfa;border:1px solid #1a1a3a}
+.tag-besiege{background:#061e28;color:#67e8f9;border:1px solid #0a2e38}
+.tag-minecraft{background:#0a1e10;color:#86efac;border:1px solid #0a2e18}
+.tag-floating{background:#061828;color:#7dd3fc;border:1px solid #0a2a3a}
+.tag-beamng{background:#0a1828;color:#fcd34d;border:1px solid #1a2838}
+.tag-city{background:#0a1228;color:#f9a8d4;border:1px solid #1a1a38}
+.tag-planet{background:#061e28;color:#67e8f9;border:1px solid #0a2e38}
+.tag-algodoo{background:#0a1820;color:#fde68a;border:1px solid #1a2830}
+.tag-other{background:rgba(0,0,0,.2);color:var(--muted);border:1px solid var(--border)}
+.tag-idea{background:#1a0608;color:#ff4444;border:1px solid #3a0a0a}
+.tag-approved{background:#051a08;color:#4ade80;border:1px solid #0a3a0a}
+.tag-hit{background:#1a0e00;color:#f59e0b;border:1px solid #b45309}
+
+.empty-state{text-align:center;color:var(--muted);padding:60px 20px;font-size:1rem}
+.empty-state span{font-size:2.5rem;display:block;margin-bottom:12px}
+
+/* ── PLANNING ── */
+.planning-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:32px}
+.planning-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+.planning-card-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.planning-card h3{font-family:"Bebas Neue",sans-serif;font-size:1.1rem;letter-spacing:1.5px;color:var(--accent);flex:1;outline:none}
+.planning-note{width:100%;min-height:80px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:"DM Sans",sans-serif;font-size:.85rem;padding:10px;resize:vertical;outline:none}
+.planning-note:focus{border-color:var(--accent)}
+.planning-section-header{font-family:"Bebas Neue",sans-serif;font-size:1.4rem;letter-spacing:2px;color:var(--text);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.priority-select{background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:"DM Sans",sans-serif;font-size:.78rem;padding:3px 8px;border-radius:6px;cursor:pointer;outline:none}
+.btn-add{background:var(--accent);color:#000;font-weight:700;border:none;padding:7px 16px;border-radius:8px;font-family:"DM Sans",sans-serif;font-size:.83rem;cursor:pointer}
+.btn-del{background:#1a0505;color:#ff6666;border:1px solid #3a0808;padding:4px 9px;border-radius:6px;font-size:.75rem;cursor:pointer;font-family:"DM Sans",sans-serif}
+
+/* ── MODAL OVERLAY ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:var(--overlay);z-index:400;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;max-width:500px;width:90%;max-height:80vh;overflow-y:auto;box-shadow:0 16px 48px var(--shadow)}
+.modal h2{font-family:"Bebas Neue",sans-serif;font-size:1.4rem;letter-spacing:2px;color:var(--accent);margin-bottom:12px}
+.modal p{font-size:.85rem;color:var(--muted);margin-bottom:16px;line-height:1.6}
+.modal-close{float:right;background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;padding:2px 6px;border-radius:4px}
+.modal-close:hover{color:var(--text)}
+.dup-list{list-style:none;padding:0}
+.dup-item{background:var(--card);border:1px solid #b45309;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:.82rem}
+.dup-item .dup-idea{color:#f59e0b;font-weight:600;margin-bottom:4px}
+.dup-item .dup-match{color:var(--muted)}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <!-- THREE DOTS MENU -->
+    <div class="dots-wrap" id="dotsWrap">
+      <button class="dots-btn" id="dotsBtn" title="Menu">&#8942;</button>
+      <div class="dots-menu" id="dotsMenu">
+        <button class="dots-menu-item" id="themeToggle">
+          <span class="item-icon" id="themeIcon">&#9728;</span>
+          <span id="themeLabel">Light Mode</span>
+        </button>
+        <div class="dots-divider"></div>
+        <button class="dots-menu-item" id="dupCheckBtn">
+          <span class="item-icon">&#128269;</span>
+          <span>Duplicate Detector</span>
+        </button>
+        <div class="dots-divider"></div>
+        <button class="dots-menu-item" id="gapCheckBtn">
+          <span class="item-icon">&#128202;</span>
+          <span>Content Gap Detector</span>
+        </button>
+        <div class="dots-divider"></div>
+        <button class="dots-menu-item" id="exportBtn">
+          <span class="item-icon">&#128229;</span>
+          <span>Export Ideas List</span>
+        </button>
+      </div>
+    </div>
+    <img src="data:image/jpeg;base64,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" alt="N" style="width:62px;height:62px;border-radius:50%;object-fit:cover;border:3px solid #00b4ff;filter:drop-shadow(0 0 14px rgba(0,180,255,.7));flex-shrink:0">
+    <div><h1>NEOTASTICS</h1><div class="subtitle">Video Catalogue</div></div>
+    <div class="header-right">
+      <span class="count-badge" id="vcBadge">327 VIDEOS</span>
+      <button class="save-btn" id="saveBtn">&#128190; Save File</button>
+    </div>
+  </div>
+  <nav class="page-nav">
+    <button class="page-tab active" data-page="catalogue">&#128250; Catalogue</button>
+    <button class="page-tab" data-page="ideas">&#128161; Ideas</button>
+    <button class="page-tab" data-page="planning">&#128203; Planning</button>
+  </nav>
+</header>
+
+<main>
+  <!-- CATALOGUE -->
+  <div class="page-section active" id="page-catalogue">
+    <div class="stats-bar">
+      <div class="stat"><span class="stat-num">327</span><span class="stat-label">Total Videos</span></div>
+      <div class="stat"><span class="stat-num">11</span><span class="stat-label">Games</span></div>
+      <div class="stat"><span class="stat-num" id="catShown">327</span><span class="stat-label">Shown</span></div>
+    </div>
+    <div class="controls-bar">
+      <div class="search-wrap">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="catSearch" placeholder="Search past videos...">
+      </div>
+      <div class="game-filter-wrap">
+        <button class="game-filter-btn" id="catGameBtn"><span id="catGameLabel">All Games</span><span class="arrow">&#9660;</span></button>
+        <div class="game-dropdown-menu" id="catGameMenu">
+          <button class="game-option active" data-game="all">All Games</button>
+          <button class="game-option" data-game="Teardown">&#128165; Teardown</button>
+          <button class="game-option" data-game="Stormworks">&#127754; Stormworks</button>
+          <button class="game-option" data-game="Roblox">&#127918; Roblox</button>
+          <button class="game-option" data-game="Besiege">&#9992; Besiege</button>
+          <button class="game-option" data-game="Minecraft">&#9935; Minecraft</button>
+          <button class="game-option" data-game="Floating Sandbox">&#128674; Floating Sandbox</button>
+          <button class="game-option" data-game="BeamNG">&#128667; BeamNG</button>
+          <button class="game-option" data-game="City Skylines">&#127961; City Skylines</button>
+          <button class="game-option" data-game="Other">&#127919; Other</button>
+        </div>
+      </div>
+      <button class="toggle-btn" id="doMoreFilterBtn">&#11088; Do More</button>
+    </div>
+    <div id="catRoot"></div>
+    <div class="empty-state" id="catEmpty" style="display:none"><span>&#127754;</span>No videos match.</div>
+  </div>
+
+  <!-- IDEAS -->
+  <div class="page-section" id="page-ideas">
+    <div class="stats-bar">
+      <div class="stat"><span class="stat-num">438</span><span class="stat-label">Total Ideas</span></div>
+      <div class="stat"><span class="stat-num" id="ideasApproved">0</span><span class="stat-label">Approved</span></div>
+      <div class="stat"><span class="stat-num" id="hitCount">0</span><span class="stat-label">Hit Ideas</span></div>
+      <div class="stat"><span class="stat-num" id="ideasShown">438</span><span class="stat-label">Shown</span></div>
+    </div>
+    <div class="controls-bar">
+      <div class="search-wrap">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="ideasSearch" placeholder="Search ideas...">
+      </div>
+      <div class="game-filter-wrap">
+        <button class="game-filter-btn" id="ideasGameBtn"><span id="ideasGameLabel">All Games</span><span class="arrow">&#9660;</span></button>
+        <div class="game-dropdown-menu" id="ideasGameMenu">
+          <button class="game-option active" data-game="all">All Games</button>
+          <button class="game-option" data-game="Teardown">&#128165; Teardown</button>
+          <button class="game-option" data-game="Stormworks">&#127754; Stormworks</button>
+          <button class="game-option" data-game="Roblox">&#127918; Roblox</button>
+          <button class="game-option" data-game="Besiege">&#9992; Besiege</button>
+          <button class="game-option" data-game="Minecraft">&#9935; Minecraft</button>
+          <button class="game-option" data-game="Floating Sandbox">&#128674; Floating Sandbox</button>
+          <button class="game-option" data-game="BeamNG">&#128667; BeamNG</button>
+          <button class="game-option" data-game="City Skylines">&#127961; City Skylines</button>
+          <button class="game-option" data-game="Planet Coaster">&#127906; Planet Coaster</button>
+          <button class="game-option" data-game="Other">&#127919; Other</button>
+        </div>
+      </div>
+    </div>
+    <div class="sub-tab-bar">
+      <button class="sub-tab active-ideas" data-ideas-tab="unapproved">&#128161; Ideas</button>
+      <button class="sub-tab" data-ideas-tab="approved">&#9989; Approved</button>
+      <button class="sub-tab" data-ideas-tab="hit">&#128293; Hit Ideas</button>
+      <button class="sub-tab" data-ideas-tab="trending">&#128640; What's Trending</button>
+    </div>
+    <div id="ideasRoot"></div>
+    <div class="empty-state" id="ideasEmpty" style="display:none"><span>&#128161;</span>No ideas match.</div>
+  </div>
+
+  <!-- PLANNING -->
+  <div class="page-section" id="page-planning">
+    <div class="planning-section-header">&#128203; Content Planning Notes</div>
+    <div class="planning-grid" id="planningGrid"></div>
+    <div style="text-align:center;margin-top:10px"><button class="btn-add" id="addCard">+ Add Note</button></div>
+  </div>
+</main>
+<div class="sync-status sync-ok" id="syncStatus">&#9729; Connected</div>
+
+
+<!-- CONTENT GAP MODAL -->
+<div class="modal-overlay" id="gapModal">
+  <div class="modal" style="max-width:600px">
+    <button class="modal-close" id="gapModalClose">&#10005;</button>
+    <h2>&#128202; Content Gap Detector</h2>
+    <p>Type any topic to see if you have covered it in past videos and find matching ideas in your list.</p>
+    <div class="gap-competitor-input">
+      <input type="text" id="gapTopicInput" placeholder="e.g. nuclear submarine, cargo plane...">
+      <button class="gap-add-btn" id="gapAddBtn">+ Add Topic</button>
+    </div>
+    <div id="gapTopicTags"></div>
+    <div id="gapResults"></div>
+  </div>
+</div>
+
+<!-- POSTING GAP WARNING -->
+<div class="posting-warning" id="postingWarning" style="display:none">
+  <h4>&#9888; Posting Gap Warning</h4>
+  <p id="postingWarningText"></p>
+  <button class="posting-warning-close" id="postingWarningClose">Dismiss</button>
+</div>
+
+<!-- DUPLICATE DETECTOR MODAL -->
+<div class="modal-overlay" id="dupModal">
+  <div class="modal">
+    <button class="modal-close" id="dupModalClose">&#10005;</button>
+    <h2>&#128269; Duplicate Detector</h2>
+    <p>Ideas that are very similar to videos you've already made. Review these before producing them.</p>
+    <ul class="dup-list" id="dupList"></ul>
+  </div>
+</div>
+
+
+<script>
+// ── FIREBASE INIT ──
+var firebaseConfig = {
+  apiKey: "AIzaSyDpMptRJH5SFy0FByFiI2eJzlU5x2pyv2c",
+  authDomain: "neotastic-catalogue-61247.firebaseapp.com",
+  databaseURL: "https://neotastic-catalogue-61247-default-rtdb.firebaseio.com",
+  projectId: "neotastic-catalogue-61247",
+  storageBucket: "neotastic-catalogue-61247.firebasestorage.app",
+  messagingSenderId: "918990751646",
+  appId: "1:918990751646:web:0cf1e5aaeeca14ee8e388f"
+};
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+var STATE_REF = db.ref("neotastics/state");
+
+var _cloudLoaded = false;
+var _pendingSave = null;
+var _saveTimer = null;
+
+function setSyncStatus(type, msg) {
+  var el = document.getElementById("syncStatus");
+  if (!el) return;
+  el.className = "sync-status " + type;
+  el.textContent = msg;
+}
+
+// Listen for real-time changes from the cloud
+STATE_REF.on("value", function(snapshot) {
+  var data = snapshot.val();
+  if (!data) {
+    // First time — push current local state up
+    if (_cloudLoaded) return; // already loaded, this is our own write
+    _cloudLoaded = true;
+    setSyncStatus("sync-ok", "☁ Connected");
+    return;
+  }
+  _cloudLoaded = true;
+  setSyncStatus("sync-ok", "☁ Connected");
+
+  // Update local state from cloud
+  if (data.doMore) doMoreSet = new Set(data.doMore);
+  if (data.approved) approvedIdeas = new Set(data.approved);
+  if (data.trendingApproved) trendingApproved = new Set(data.trendingApproved);
+  if (data.planning && data.planning.length) planningCards = data.planning;
+
+  // Also update the stateData tag so save-to-file captures it
+  document.getElementById("stateData").textContent = JSON.stringify({
+    doMore: Array.from(doMoreSet),
+    approved: Array.from(approvedIdeas),
+    trendingApproved: Array.from(trendingApproved),
+    planning: planningCards
+  });
+
+  // Re-render everything
+  if (typeof renderCat === "function") {
+    renderCat();
+    renderIdeas();
+    renderPlanning();
+    updateHitCount();
+  }
+}, function(error) {
+  setSyncStatus("sync-error", "✕ Offline — changes saved locally");
+});
+
+// Override saveState to also push to Firebase
+var _origSaveState = null; // will be set after main script loads
+
+function cloudSave() {
+  setSyncStatus("sync-saving", "⟳ Saving...");
+  var payload = {
+    doMore: Array.from(doMoreSet),
+    approved: Array.from(approvedIdeas),
+    trendingApproved: Array.from(trendingApproved),
+    planning: planningCards,
+    lastUpdated: Date.now()
+  };
+  // Update stateData tag for local save-to-file
+  document.getElementById("stateData").textContent = JSON.stringify(payload);
+  // Push to Firebase
+  STATE_REF.set(payload, function(error) {
+    if (error) {
+      setSyncStatus("sync-error", "✕ Save failed — check connection");
+      setTimeout(function(){ setSyncStatus("sync-ok", "☁ Connected"); }, 3000);
+    } else {
+      setSyncStatus("sync-ok", "☁ Saved " + new Date().toLocaleTimeString("en-GB", {hour:"2-digit",minute:"2-digit"}));
+    }
+  });
+}
+
+// Debounced save — waits 800ms after last change before saving
+function debouncedCloudSave() {
+  if (_saveTimer) clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(cloudSave, 800);
+}
+
+// Monitor connection state
+db.ref(".info/connected").on("value", function(snap) {
+  if (snap.val() === true) {
+    setSyncStatus("sync-ok", "☁ Connected");
+  } else {
+    setSyncStatus("sync-offline", "⚡ Offline — changes queued");
+  }
+});
+</script>
+
+<script id="stateData" type="application/json">{"doMore":[],"approved":[],"planning":[{"id":1,"title":"This Week","note":"","priority":"this-week"},{"id":2,"title":"Coming Soon","note":"","priority":"soon"},{"id":3,"title":"Backlog Ideas","note":"","priority":"someday"}]}</script>
+
+<script>
+const RAW = [
+  // TEARDOWN
+  { title: "Cars vs REALISTIC SPIKE PIT Destruction! Teardown Gameplay", game: "Teardown" },
+  { title: "How Many Planes to Destroy a Skyscraper? | Teardown Destruction", game: "Teardown" },
+  { title: "RMS Titanic VS Modern Cruise Ship Survival Challenge! Teardown", game: "Teardown" },
+  { title: "Ships vs ICEBERG Sinking DESTRUCTION! Teardown", game: "Teardown" },
+  { title: "Bridges vs EXTREME WEIGHT TESTING! Teardown", game: "Teardown" },
+  { title: "Space Station VS BLACK HOLE! Teardown (Epic Destruction)", game: "Teardown" },
+  { title: "Titanic VS Iceberg AND TSUNAMI Realistic Destruction! | Teardown", game: "Teardown" },
+  { title: "Mega Mansion VS Tornado! Teardown Realistic Destruction Test", game: "Teardown" },
+  { title: "White House vs ATTACKS Realistic SURVIVAL! Teardown", game: "Teardown" },
+  { title: "DOING EVERYTHING I CAN TO DESTROY THE TALLEST SKYSCRAPER!", game: "Teardown" },
+  { title: "MOST REALISTIC HYDRAULIC PRESS Destruction Teardown Game", game: "Teardown" },
+  { title: "Making The WORST Mid-Air Plane Collision EVER In Teardown!", game: "Teardown" },
+  { title: "Realistic Sky-Scraper FIRE RESCUE Challenge! Teardown", game: "Teardown" },
+  { title: "New YORK vs EARTHQUAKE Destruction! (Collapse) Teardown", game: "Teardown" },
+  { title: "Planes vs WHITE HOUSE Destruction! Teardown", game: "Teardown" },
+  { title: "ZOMBIES ATTACK SCHOOL! Teardown Gameplay", game: "Teardown" },
+  { title: "Best of TITANIC DESTRUCTION! Teardown Gameplay", game: "Teardown" },
+  { title: "New York vs PAUSING TSUNAMI Destruction! Teardown", game: "Teardown" },
+  { title: "Ships vs BRITANIC HEAD-ON Destruction! Teardown", game: "Teardown" },
+  { title: "Haunted SCHOOL vs EARTHQUAKE Destruction! Teardown", game: "Teardown" },
+  { title: "Collapsing BRIDGES by ONLY USING TRAINS! Teardown Destruction", game: "Teardown" },
+  { title: "Titanic vs TITANIC HEAD ON DESTRUCTION!", game: "Teardown" },
+  { title: "AI Tells me How to COLLAPSE A BRIDGE! | Teardown", game: "Teardown" },
+  { title: "Earthquake vs SKY-SCRAPER! (COLLAPSE) Teardown", game: "Teardown" },
+  { title: "Creepy Hospital vs TSUNAMI WAVE MOD Destruction! Teardown", game: "Teardown" },
+  { title: "Famous Skyscrapers VS Natural Disasters DESTRUCTION", game: "Teardown" },
+  { title: "Mall VS TSUNAMI + VOLCANO Destruction!", game: "Teardown" },
+  { title: "Planes vs TITANIC Destruction! | Teardown Mods", game: "Teardown" },
+  { title: "Kraken CRASHES ENTIRE PLANE! Teardown Gameplay", game: "Teardown" },
+  { title: "GODZILLA Destroys New YORK CITY! Teardown Gameplay", game: "Teardown" },
+  { title: "Iron Man COLLAPSES NEW YORK! Teardown Gameplay", game: "Teardown" },
+  { title: "New York vs NUCLEAR STRIKE Destruction! Teardown Gameplay", game: "Teardown" },
+  { title: "Realistic Volcano vs New YORK! Teardown Gameplay", game: "Teardown" },
+  { title: "EXTREME Golden Gate Bridge WEIGHT TESTING! Teardown Gameplay", game: "Teardown" },
+  { title: "Titanic vs Britannic HEAD-ON! Teardown Gameplay", game: "Teardown" },
+  { title: "Golden Gate BRIDGE vs MEGA TSUNAMI! Teardown (Realistic Destruction)", game: "Teardown" },
+  { title: "Trapping NPCs Inside a Collapsing Building With NO ESCAPE – Teardown Gameplay", game: "Teardown" },
+  { title: "Collapsing a Skyscraper using a BULLDOZER! Teardown Destruction!", game: "Teardown" },
+  { title: "Cassoh vs GOLDEN GATE BRIDGE! (Collapse) Teardown", game: "Teardown" },
+  { title: "Earthquake Spawns TSUNAMI! Teardown Destruction", game: "Teardown" },
+  { title: "REALISTIC Golden Gate Bridge COLLAPSE Destruction! Teardown", game: "Teardown" },
+  { title: "Cars vs Boeing 737 PLANE CRASH! Teardown Gameplay", game: "Teardown" },
+  { title: "Caseoh vs NEW YORK CITY (Collapse) Teardown", game: "Teardown" },
+  { title: "Fans vs COLLAPSING SKYSCRAPER Survival! Teardown", game: "Teardown" },
+  { title: "Ships vs GOLDEN GATE BRIDGE! Teardown Gameplay", game: "Teardown" },
+  { title: "Plane LOSES BOTH WINGS and Crashes INTO OCEAN | Teardown", game: "Teardown" },
+  { title: "SEWAGE WAVE Destroys NEW YORK CITY! Teardown", game: "Teardown" },
+  { title: "Extreme Pranks on SKYSCRAPERS! Teardown Gameplay", game: "Teardown" },
+  { title: "Trapping NPCs On A COLLAPSING BRIDGE!", game: "Teardown" },
+  { title: "ZOMBIES CRASH PLANE! Teardown Gameplay", game: "Teardown" },
+  { title: "CASEOH CRASHES OUR PLANE?! Teardown Gameplay", game: "Teardown" },
+  { title: "Titanic Drives Under COLLAPSING BRIDGE Teardown", game: "Teardown" },
+  { title: "Realistic CITY COLLAPSE After MASSIVE EARTHQUAKE!", game: "Teardown" },
+  { title: "Hiding INSIDE a Plane While It CRASHES—Can I Survive?!", game: "Teardown" },
+  { title: "Airport TSA EXPLODES PLANE!", game: "Teardown" },
+
+  // STORMWORKS
+  { title: "Captain SINKS SHIP In HUGE CRASH! Stormworks Multiplayer", game: "Stormworks" },
+  { title: "Trying EVERYTHING TO DESTROY UNSINKABLE Ships! Stormworks", game: "Stormworks" },
+  { title: "Cargo Ships vs Tsunamis | Stormworks gameplay", game: "Stormworks" },
+  { title: "Big VS Small Ships In A Giant Whirlpool! Stormworks", game: "Stormworks" },
+  { title: "CRUISE SHIP vs High Waves SINKING SURVIVAL! Stormworks", game: "Stormworks" },
+  { title: "Tsunami Pods vs HUGE-TSUNAMI Survival! Stormworks", game: "Stormworks" },
+  { title: "Coast Guard Ships vs BIGGEST WAVES EVER! Stormworks Testing", game: "Stormworks" },
+  { title: "We Started Sinking AS COAST-GUARD! Stormworks Chaos", game: "Stormworks" },
+  { title: "War Ship SINKS IN NORTH SEA (Survival) Stormworks Disaster", game: "Stormworks" },
+  { title: "Water Proof Plane CRASH LANDS IN OCEAN! Stormworks", game: "Stormworks" },
+  { title: "Cruise Ships vs Tsunamis | Stormworks Gameplay", game: "Stormworks" },
+  { title: "Storm Shelters vs TSUNAMI DESTRUCTION! Stormworks TESTING!", game: "Stormworks" },
+  { title: "Coast Guard DURING HURRICANE CHALLENGE! Stormworks Sinking Ship", game: "Stormworks" },
+  { title: "Staying in a Ship AFTER IT SINKS CHALLENGE! Stormworks", game: "Stormworks" },
+  { title: "Submarine Designs vs CRUSHING DEPTH MOD! Stormworks Destruction", game: "Stormworks" },
+  { title: "Deeper Oceans + Crushing DEPTH MOD! Stormworks Survival", game: "Stormworks" },
+  { title: "Sinking Mega Yacht VS Hurricane SURVIVAL! Stormworks Build and Rescue", game: "Stormworks" },
+  { title: "Navy WARSHIPS vs Tsunamis | Stormworks Gameplay", game: "Stormworks" },
+  { title: "Passenger Plane EXPLODES Above Ocean! Stormworks Plane Crash", game: "Stormworks" },
+  { title: "Sinking on a CRUISE SHIP Survival! Stormworks Gameplay", game: "Stormworks" },
+  { title: "Storm Chasing IN A CRUISE SHIP! Stormworks Sinking SURVIVAL", game: "Stormworks" },
+  { title: "Transporting a NUKE in the North Sea! (DESTRUCTION) Stormworks", game: "Stormworks" },
+  { title: "Captain TRAPPED INSIDE Sinking Cruise Ship! Stormworks", game: "Stormworks" },
+  { title: "Testing THE STRONGEST Boat Against DISASTERS! - Stormworks", game: "Stormworks" },
+  { title: "Realistic SEWAGE TSUNAMI vs Cruise Ship! Stormworks", game: "Stormworks" },
+  { title: "The BIGGEST Storm Ever Simulated in Stormworks – Ultimate Challenge!", game: "Stormworks" },
+  { title: "Saving MY OWN SINKING SHIP as Coast Guard! Stormworks (2 parts)", game: "Stormworks" },
+  { title: "Cargo Ship VS MEGA TSUNAMI! Can It Stay Afloat? Stormworks", game: "Stormworks" },
+  { title: "Coast Guard Helicopter CRASHES IN STORM! Stormworks", game: "Stormworks" },
+  { title: "Trying to ESCAPE THE SEWAGE TSUNAMI Stormworks", game: "Stormworks" },
+  { title: "Driving in SEWAGE STORM! Stormworks Sinking Ship Survival", game: "Stormworks" },
+  { title: "Sinking Plane Survival IN SEWAGE?! Stormworks", game: "Stormworks" },
+  { title: "Storm Chasing A SEWAGE TSUNAMI! Stormworks", game: "Stormworks" },
+
+  // ROBLOX
+  { title: "Surviving The MOST DANGEROUS Volcano Disaster In Roblox!", game: "Roblox" },
+  { title: "Surviving The SINKING TITANIC AS CREW! Roblox Titanic SOS", game: "Roblox" },
+  { title: "Can I Build a Ship That Survives The Ocean? Roblox Gameplay", game: "Roblox" },
+  { title: "Surviving SINKING SHIPS IN ENGINE ROOM! Roblox", game: "Roblox" },
+  { title: "The MOST CHAOTIC Plane Crash Physics Simulator in Roblox", game: "Roblox" },
+  { title: "Playing WORST Rated Sinking Ship Games in Roblox!", game: "Roblox" },
+  { title: "Playing THE BEST Natural Disaster Survival Game In Roblox!", game: "Roblox" },
+  { title: "Is This the MOST REALISTIC Flood Escape Game ever made? Roblox", game: "Roblox" },
+  { title: "Trying to Survive The REALISTIC SINKING TITANIC in Roblox", game: "Roblox" },
+  { title: "Roblox Cargo Ship VS Deadly Waves! (Sinking Simulator)", game: "Roblox" },
+  { title: "Can We SINK This Mega SHIP In Roblox Sinking Simulator?", game: "Roblox" },
+  { title: "Surviving a REALISTIC SINKING Military Destroyer in Roblox Simulator", game: "Roblox" },
+  { title: "Most REALISTIC Iceberg SINKING SIMULATOR! Roblox", game: "Roblox" },
+  { title: "Testing the Most Realistic Sinking Ship Game Ever Made – Roblox", game: "Roblox" },
+  { title: "Titanic SINKING Challenge: Can We SURVIVE as CAPTAIN In Roblox!", game: "Roblox" },
+  { title: "Most DESTRUCTIVE Car Crashing Game In Roblox!", game: "Roblox" },
+  { title: "Trying to Survive the ROBLOX TSUNAMI! Wave Simulator", game: "Roblox" },
+  { title: "Surviving 10 NATURAL DISASTERS AT ONCE! Roblox Simulator", game: "Roblox" },
+  { title: "Surviving THE MOST Realistic Cargo Ship Sinking In Roblox!", game: "Roblox" },
+  { title: "Realistic COLLAPSING SKYSCRAPERS In Roblox!", game: "Roblox" },
+  { title: "Titanic SINKS But I'm Playing As HOMELESS! | Roblox Survival", game: "Roblox" },
+  { title: "BIGGEST Ship DESTROYS Smaller Boats! Roblox Destruction", game: "Roblox" },
+  { title: "Titanic VS Boats and Ships Destruction! Roblox", game: "Roblox" },
+  { title: "Can We Save ALL PASSENGERS On A Sinking TITANIC In Roblox?", game: "Roblox" },
+  { title: "Destroying Ships Using SMALLEST BOAT EVER! Roblox Realistic Destruction", game: "Roblox" },
+  { title: "Survive Disasters IN A SHIP! Realistic Roblox Game", game: "Roblox" },
+  { title: "Chasing BIG SHIPS with EXPLOSIVE FUEL BOAT! Roblox", game: "Roblox" },
+  { title: "1,000 PASSENGERS vs SINKING Ships! Roblox Sinking Simulator", game: "Roblox" },
+  { title: "Sailing AND THEN SINKING! Roblox Ship Simulator", game: "Roblox" },
+  { title: "Roblox Sinking Ships BUT I'M THE CAPTAIN?! Realistic Sinking Simulator", game: "Roblox" },
+  { title: "Building ULTIMATE SURVIVAL Ship! Roblox Build a Boat for Treasure", game: "Roblox" },
+
+  // BESIEGE
+  { title: "Realistic Plane Crashes DESTRUCTION! (Besiege Gameplay)", game: "Besiege" },
+  { title: "Realistic PLANE CRASH Physics Test In Besiege!", game: "Besiege" },
+  { title: "Can We CREATE The WORST Mid-Air Collision Ever In Besiege?", game: "Besiege" },
+  { title: "Testing Which Plane BEST Survives Crashes In Besiege!", game: "Besiege" },
+  { title: "Best of MOST REALISTIC PLANE CRASHES! | Besiege Gameplay", game: "Besiege" },
+  { title: "Testing CRAZY Mid-Air Plane Crashes In Besiege", game: "Besiege" },
+  { title: "CRASH Landing THE BIGGEST Plane In Besiege", game: "Besiege" },
+  { title: "Plane Landings GONE TERRIBLY WRONG In Besiege!", game: "Besiege" },
+  { title: "Simulating WORST Plane Landings Crashes Destruction! Besiege", game: "Besiege" },
+  { title: "This Plane Crash Simulator SHOULD BE ILLEGAL! Besiege", game: "Besiege" },
+  { title: "Emergency Landing AS CAPTAIN POV! Besiege Crash", game: "Besiege" },
+  { title: "Losing ALL WINGS and CRASH LANDING! Besiege Destruction", game: "Besiege" },
+  { title: "MOST REALISTIC Plane WATER LANDINGS! Besiege", game: "Besiege" },
+  { title: "The MOST DANGEROUS Plane to Ever Exist?– Besiege", game: "Besiege" },
+
+  // MINECRAFT
+  { title: "Building TORNADO FALLOUT BUNKER In Minecraft! (EPIC TEST)", game: "Minecraft" },
+  { title: "Cruise Ship VS HUGE TSUNAMI! Minecraft (Realistic Gameplay)", game: "Minecraft" },
+  { title: "Minecraft Bunker DESTROYED by MEGA TSUNAMI! (Realistic Gameplay)", game: "Minecraft" },
+  { title: "Can A Minecraft Skyscraper Withstand A MEGA TSUNAMI?", game: "Minecraft" },
+  { title: "Minecraft CITY vs TNT MOD DESTRUCTION! (CRAZY Realistic)", game: "Minecraft" },
+  { title: "Minecraft Survival but ITS REALISTIC PHYSICS!", game: "Minecraft" },
+  { title: "TSUNAMI WIPES OUT Minecraft Mansion!", game: "Minecraft" },
+  { title: "Doing EVERYTHING I CAN To Destroy a CITY! Minecraft", game: "Minecraft" },
+  { title: "Minecraft BEACH RESORT VS The BIGGEST TSUNAMI! (Insane Gameplay)", game: "Minecraft" },
+  { title: "Glass DOME vs TSUNAMI DESTRUCTION! Minecraft Gameplay", game: "Minecraft" },
+  { title: "House vs LAVA TSUNAMI Destruction (ESCAPE!) | Minecraft Gameplay", game: "Minecraft" },
+  { title: "City vs 10 MODDED TNT AT ONCE! Minecraft Destruction", game: "Minecraft" },
+  { title: "Minecraft Survival But Natural Disasters SPAWN EVERY 3 Minutes", game: "Minecraft" },
+
+  // FLOATING SANDBOX
+  { title: "Doing EVERYTHING to FLIP The CRUISE SHIP In Floating Sandbox", game: "Floating Sandbox" },
+  { title: "Cruise Lines vs ICEBURG! (Captain POV!) Floating Sandbox", game: "Floating Sandbox" },
+  { title: "Extreme Pranks on Titanic Passengers! - Floating Sandbox", game: "Floating Sandbox" },
+  { title: "NEW EXPLOSIONS MOD! Most Realistic Sinking Simulator (Floating Sandbox)", game: "Floating Sandbox" },
+  { title: "Mega Tsunami VS Cruise Ship INSTANT DESTRUCTION! - Floating Sandbox", game: "Floating Sandbox" },
+  { title: "Ships vs ICEBERG and MEGA WAVE Combo Destruction Test - Floating Sandbox", game: "Floating Sandbox" },
+  { title: "Ships vs WALL Destruction! Floating Sandbox", game: "Floating Sandbox" },
+  { title: "Drop Test ON CORAL REEF! Floating Sandbox", game: "Floating Sandbox" },
+  { title: "Ships vs SHALLOW WATERS! Floating Sandbox", game: "Floating Sandbox" },
+
+  // BEAMNG
+  { title: "Extreme Weight Testing On COLLAPSABLE BRIDGE! BeamNG Drive Mod", game: "BeamNG" },
+  { title: "Realistic Truck DESTROYS Collapsable Bridge In BeamNG Drive Mod", game: "BeamNG" },
+  { title: "Surviving THE MOST DANGEROUS BeamNG Road!", game: "BeamNG" },
+  { title: "LONGEST Bus COLLAPSES Physics Bridge! Beamng Mods", game: "BeamNG" },
+  { title: "Steam Roller COLLAPSES ENTIRE BRIDGE! Beanmg", game: "BeamNG" },
+  { title: "Bridges COLLAPSE Under Heavy Trucks – Extreme Weight Test", game: "BeamNG" },
+
+  // CITY SKYLINES
+  { title: "Destroying a City with SEWAGE WAVE! City Skylines 2", game: "City Skylines" },
+  { title: "City Skylines But POOP is DRINKING WATER!", game: "City Skylines" },
+  { title: "How Much Sewage Until it OVERFLOWS!? – City Skylines 2", game: "City Skylines" },
+  { title: "Building a City BELOW SEA LEVEL! (TSUNAMI) City Skylines 2", game: "City Skylines" },
+  { title: "Pumping RAW CITY SEWAGE into River DRINKING WATER Network", game: "City Skylines" },
+  { title: "City Skylines but ONLY 1 Sewer Outlet! THEN IT FLOODED EVERYTHING", game: "City Skylines" },
+  { title: "City Skylines but I ELECTRIFIED Drinking Water! Then it FLOODED", game: "City Skylines" },
+  { title: "Can 100 bunkers Save a City From a SEWAGE TSUNAMI?! City Skylines", game: "City Skylines" },
+  { title: "I Built the STRONGEST CITY... Then DESTROYED IT! City Skylines 2", game: "City Skylines" },
+  { title: "How Many TSUNAMIS can a City Survive?! City Skylines 2", game: "City Skylines" },
+  { title: "City Skylines but Drinking Water is 100% POLLUTED!", game: "City Skylines" },
+
+  // OTHER
+  { title: "Actual Tsunami Simulator! Algodoo Destruction", game: "Algodoo" },
+  { title: "Lifeboats vs TSUNAMI SURVIVAL Destruction", game: "Other" },
+  { title: "Train Destruction Compilation", game: "Other" },
+  { title: "Most REALISTIC AC130 Gunship Game EVER! Project Gunship", game: "Other" },
+  { title: "Building THE MOST DANGEROUS WATER SLIDE!! Planet Coaster", game: "Planet Coaster" },
+  { title: "I Build a Park with a 0% SURVIVAL RATE.. Planet Coaster", game: "Planet Coaster" },
+
+  // TEARDOWN (batch 2)
+  { title: "Throwing Passengers in CRASHING PLANE ENGINE! Teardown Gameplay", game: "Teardown" },
+  { title: "EXTREME Pranks on GOLDEN GATE BRIDGE! Teardown", game: "Teardown" },
+  { title: "CaseOH TRAPPED Inside a COLLAPSING SKYSCRAPER! Teardown", game: "Teardown" },
+  { title: "Bay Bridge COLLAPSES Under Extreme Weight Stress – Teardown", game: "Teardown" },
+  { title: "Dropping a SKYSCRAPER Onto a BRIDGE! FULL Collapse Test! Teardown", game: "Teardown" },
+  { title: "CaseOH DESTROYS MINECRAFT! Teardown Gameplay", game: "Teardown" },
+  { title: "CaseOH vs PRISON ESCAPE! Will he Make it? Teardown", game: "Teardown" },
+  { title: "Golden Gate Bridge DESTROYED by CARS! | Teardown Physics", game: "Teardown" },
+  { title: "Raining PLANETS vs BRIDGES! (COLLAPSE) Teardown", game: "Teardown" },
+  { title: "CaseOH WALKS on GOLDEN GATE BRIDGE! Teardown Gameplay", game: "Teardown" },
+  { title: "Boosted Cars VS NEW YORK CITY! Teardown Destruction", game: "Teardown" },
+  { title: "Sydney DESTROYED by SEWAGE WAVE! Teardown", game: "Teardown" },
+
+  // ROBLOX (batch 2)
+  { title: "TITANIC Gets Hit by 1,000 Icebergs! | Roblox Destruction", game: "Roblox" },
+  { title: "Finding the STRONGEST SHIP EVER! Roblox Ship Physics", game: "Roblox" },
+  { title: "This SHIP is UNSTOPPABLE! Roblox Ship Crash Simulator", game: "Roblox" },
+  { title: "MAXIMUM DAMAGE with SMALLEST Boats Destruction! - Roblox", game: "Roblox" },
+  { title: "Can 10 Lifeboats Save 1,000 People? | Roblox Titanic Chaos", game: "Roblox" },
+  { title: "Most Realistic MISSILES VS TITANIC Destruction! Roblox", game: "Roblox" },
+  { title: "Most Realistic Ship Destruction MOVIE! Roblox Sinking Sim", game: "Roblox" },
+  { title: "1,000 Sinking Ship Passengers vs ONE LIFEBOAT?! Roblox", game: "Roblox" },
+  { title: "Smallest Boat SINKS THE TITANIC?! - Roblox Ship Destruction", game: "Roblox" },
+  { title: "REALISTIC Titanic SINKING but 10,000 PASSENGERS?! Roblox", game: "Roblox" },
+  { title: "Trying to Survive DISASTER OCEAN! Roblox Destruction", game: "Roblox" },
+  { title: "SMALLEST BOAT vs Entire Lobby! Will we Survive? Roblox", game: "Roblox" },
+  { title: "BIGGEST CRUISE SHIP vs Entire Lobby! Will we Survive? Roblox Sinking Simulator", game: "Roblox" },
+  { title: "Destroying Ships with THE FUEL BOAT! Roblox Physics", game: "Roblox" },
+  { title: "This RESCUE SHIP is MORE Dangerous THAN DISASTERS | Roblox", game: "Roblox" },
+  { title: "Disaster Ocean but IM THE WORST DRIVER?! Roblox", game: "Roblox" },
+
+  // BESIEGE (batch 2)
+  { title: "Landing BUT WITH NO LANDING GEAR?! Besiege Plane Crash", game: "Besiege" },
+  { title: "Plane LOSES BOTH Wings MID-FLIGHT! Can It Land? | Besiege Realistic", game: "Besiege" },
+  { title: "Epic Plane WATER CRASH LANDINGS! Besiege Survival", game: "Besiege" },
+  { title: "Crashing PLANES into CHERNOBYL! Besiege Realistic Destruction", game: "Besiege" },
+
+  // CITY SKYLINES (batch 2)
+  { title: "City Skylines BUT TSUNAMI EVERY 5 MINUTES!", game: "City Skylines" },
+  { title: "City Skylines but All Drinking Water Comes From RAW SEWAGE!", game: "City Skylines" },
+  { title: "City Skylines BUT I Used SEWAGE to Fix Traffic Jams", game: "City Skylines" },
+  { title: "This City Is 100% Sewage Powered (And It FLOODED) City Skylines 2", game: "City Skylines" },
+  { title: "Can we FILTER SEWAGE to be DRINKING WATER?! (safely) City Skylines", game: "City Skylines" },
+  { title: "Sewage RIVER OVERFLOWS INTO CITY! City Skylines 2", game: "City Skylines" },
+  { title: "City Skylines but I Built the CITY Inside a SEWAGE DRAIN!", game: "City Skylines" },
+
+  // PLANET COASTER (batch 2)
+  { title: "Building the TALLEST Drop that NOBODY Survives! Planet Coaster", game: "Planet Coaster" },
+  { title: "Building the WORST Waterslides In Planet Coaster 2!", game: "Planet Coaster" },
+  { title: "I Built the MOST ILLEGAL Theme Park Ever | Planet Coaster", game: "Planet Coaster" },
+  { title: "Building a 0% Survival Rate THEME PARK! Planet Coaster!", game: "Planet Coaster" },
+
+  // STORMWORKS (batch 2)
+  { title: "Survive 10 Minutes UNDERWATER in a Sunken Ship! Stormworks Challenge", game: "Stormworks" },
+
+  // MINECRAFT (batch 2)
+  { title: "STRONGEST BUNKER vs 20000x NUKE TNT! Minecraft", game: "Minecraft" },
+
+  // OTHER (batch 2)
+  { title: "Ship Crash Physics but ONLY USING THE TITANIC! Will we SINK?", game: "Other" },
+
+  // TEARDOWN (batch 3)
+  { title: "Titanic Rams BUSY GOLDEN GATE BRIDGE! Teardown", game: "Teardown" },
+  { title: "Tung SAHUR vs MAX SECURITY PRISON! Teardown", game: "Teardown" },
+  { title: "Planes vs GOLDEN GATE BRIDGE DESTRUCTION! Teardown", game: "Teardown" },
+  { title: "Dropping a Cruise Ship on a Bridge (to see if it bounces!) Teardown Destruction", game: "Teardown" },
+  { title: "Tung Sahar SPLITS PLANE IN TWO! Teardown Gameplay", game: "Teardown" },
+  { title: "Minecraft Mansion DESTROYED BY CASEOH! Teardown Gameplay", game: "Teardown" },
+  { title: "Dropping CaseOH on Physics BUILDING! Teardown Gameplay", game: "Teardown" },
+  { title: "Can You SURVIVE Inside a FALLING SKYSCRAPER?! – Teardown", game: "Teardown" },
+  { title: "TSUNAMI Rams Busy GOLDEN GATE BRIDGE! - Teardown", game: "Teardown" },
+  { title: "Titanic Rams MINECRAFT GOLDEN GATE BRIDGE! Teardown", game: "Teardown" },
+  { title: "CaseOH DESTROYS Aircraft Carrier SINKING DESTRUCTION! Teardown Gameplay", game: "Teardown" },
+  { title: "Titanic Under COLLAPSING Golden Gate Bridge!", game: "Teardown" },
+  { title: "WORST PRANKS on Poor Train Driver! Teardown Gameplay", game: "Teardown" },
+  { title: "Heavy Trucks vs GOLDEN GATE BRIDGE! Teardown Collapse", game: "Teardown" },
+  { title: "CaseOH vs TITANIC Head on DESTRUCTION! Teardown Gameplay", game: "Teardown" },
+  { title: "Stacked TITANICS vs GOLDEN GATE BRIDGE! | Teardown", game: "Teardown" },
+  { title: "How Many MINECRAFT STEVES to DESTROY a BRIDGE! – Teardown", game: "Teardown" },
+  { title: "Tsunami YEETS CRUISE SHIP into GOLDEN GATE BRIDGE! Teardown", game: "Teardown" },
+  { title: "Massive Skyscraper COLLAPSE Destroys Golden Gate BRIDGE! Teardown", game: "Teardown" },
+  { title: "Most Destructive Moments of 2025 in TEARDOWN!", game: "Teardown" },
+  { title: "WORST Pranks on POOR PLANE PILOT!", game: "Teardown" },
+
+  // STORMWORKS (batch 3)
+  { title: "Trapped on a Cruise Ship with ZOMBIES… Then a TSUNAMI Hit! Stormworks", game: "Stormworks" },
+  { title: "Ship Passengers vs SEWAGE TSUNAMI! Stormworks Multiplayer Sinking", game: "Stormworks" },
+  { title: "ALL Engine FAILURE Crashes Boeing 747! Stormworks Plane Crash", game: "Stormworks" },
+  { title: "Cruise Ship vs BIGGEST WHIRL POOL Survival! Stormworks", game: "Stormworks" },
+  { title: "Clicking 'self destruct' on a CRUISE SHIP! Stormworks Survival", game: "Stormworks" },
+  { title: "RUSTY Ship enters MASSIVE STORM! Will we Survive?! Stormworks", game: "Stormworks" },
+  { title: "Tsunami vs World's Tallest Cruise Ship! | Stormworks Survival", game: "Stormworks" },
+  { title: "Huge Tsunami RAMS NUCLEAR TRANSPORT SHIP! Stormworks Sinks", game: "Stormworks" },
+  { title: "I Built a Homemade TSUNAMI POD and Tested it! (Gone VERY BAD)", game: "Stormworks" },
+  { title: "Sinking The REAL LIFE 'MTS Oceanos' In Stormworks! Realistic Ship", game: "Stormworks" },
+  { title: "Nuclear Submarine MELTDOWN During a DEEP DIVE! Stormworks", game: "Stormworks" },
+  { title: "WORLD'S BIGGEST YACHT vs TORNADO! | Stormworks", game: "Stormworks" },
+  { title: "A TSUNAMI Hit My Aircraft Carrier Submarine… Stormworks", game: "Stormworks" },
+  { title: "RMS Britannic vs HUGE TSUNAMI! Stormworks", game: "Stormworks" },
+  { title: "B-33 BOMBER Gets SHOT DOWN By AI Military In Stormworks!", game: "Stormworks" },
+  { title: "Cruise Ship vs Monster Whirlpool… And Then the TSUNAMI", game: "Stormworks" },
+  { title: "Cruise Ship vs Back-to-Back Tsunamis! | Stormworks Sinking Survival", game: "Stormworks" },
+  { title: "Building a Tsunami Bunker with 2 Escape Pods! | PART 2 Stormworks", game: "Stormworks" },
+  { title: "Is My Tsunami Bunker Tornado-Proof?! | Stormworks", game: "Stormworks" },
+  { title: "Worst Pranks on a Cruise Ship Captain! | Stormworks Multiplayer", game: "Stormworks" },
+
+  // ROBLOX (batch 3)
+  { title: "INSANE Ship Crash & Destruction Moments! | Roblox", game: "Roblox" },
+  { title: "This Realistic Roblox Ship Game has LEGO PHYSICS!!", game: "Roblox" },
+  { title: "Can TITANIC Survive ICEBERGS… With MODERN TECHNOLOGY?", game: "Roblox" },
+  { title: "Destroying NEW CRUISE SHIP (with nukes) In Roblox SHIP PHYSICS!", game: "Roblox" },
+  { title: "Sail and Sink is getting WAY TOO REALISTIC FOR ROBLOX!", game: "Roblox" },
+  { title: "Surviving as a POOR Passenger On THE SINKING TITANIC! | Roblox", game: "Roblox" },
+  { title: "I Pretended to Be Coast Guard... and Sank EVERYONE! Roblox", game: "Roblox" },
+  { title: "I Became the WORST Captain on the TITANIC… Everything Went Wrong", game: "Roblox" },
+  { title: "More SHIPS VS DISASTERS IN ROBLOX! Disaster Ocean", game: "Roblox" },
+  { title: "Sail and Sink's NEW REALISTIC PIRATE SHIP is AWESOME!", game: "Roblox" },
+  { title: "Crashing the TITANIC into EVERY SHIP! Roblox Physics", game: "Roblox" },
+  { title: "I Found the SECRET FIRE TOOL and SUNK Everyone's Ships! Roblox Sail and Sink", game: "Roblox" },
+  { title: "Can we SINK This MEGA SHIP in Roblox Sail and Sink?!", game: "Roblox" },
+  { title: "Build to Survive the Tsunami! | Roblox", game: "Roblox" },
+  { title: "Sinking Ships but with REALISTIC AIR POCKETS! Roblox Survival", game: "Roblox" },
+  { title: "Finding the STRONGEST Ship in Sail and Sink Simulator!", game: "Roblox" },
+  { title: "Building a Homemade TSUNAMI POD then TESTING IT! Multiplayer", game: "Roblox" },
+  { title: "TITANIC vs INSTANT SINKING – Roblox Water Physics", game: "Roblox" },
+  { title: "ROBLOX COMPILATION", game: "Roblox" },
+  { title: "SMALLEST Ship vs BIGGEST Ship… Which Survives? Roblox", game: "Roblox" },
+  { title: "I Found the Best City Destruction Game on Roblox!", game: "Roblox" },
+  { title: "New Ultra-Realistic Sinking Aircraft Carrier Survival in Roblox", game: "Roblox" },
+  { title: "I Found the Most Realistic Roblox Golden Gate Bridge Game!", game: "Roblox" },
+  { title: "Testing MASSIVE Ships Vs SMALL Ships in ROBLOX!", game: "Roblox" },
+  { title: "Biggest Ship Destroys Everyone! | Roblox", game: "Roblox" },
+  { title: "Surviving Roblox's Most Dangerous Boat Game", game: "Roblox" },
+  { title: "Titanic Gets Hunted by Smaller Boats?! | Roblox", game: "Roblox" },
+  { title: "Roblox Natural Disasters, But It's Cursed?", game: "Roblox" },
+  { title: "Draw a Boat to Survive?! | Roblox", game: "Roblox" },
+  { title: "Small vs Giant Ships vs Nuke! | Roblox", game: "Roblox" },
+
+  // FLOATING SANDBOX (batch 3)
+  { title: "MORE of Ships vs SHALLOW WATERS Destruction! Floating Sandbox", game: "Floating Sandbox" },
+  { title: "Titanic SLAMMED Into a Wall of ICE! (WITH PASSENGERS) | Floating Sandbox", game: "Floating Sandbox" },
+  { title: "Doing EVERYTHING In My Power To Destroy This Cruise Ship | Floating Sandbox", game: "Floating Sandbox" },
+  { title: "$1 vs $1,000,000 Ship Iceberg Impact Test! | Floating Sandbox", game: "Floating Sandbox" },
+
+  // BEAMNG (batch 3)
+  { title: "Bridge COLLAPSES with Cars Are STUCK On It! – BeamNG Epic", game: "BeamNG" },
+  { title: "Bridge vs OVERSIZED TRUCK Destruction! BeamNG", game: "BeamNG" },
+  { title: "Neotastic Face Reveal WHILE ON DANGEROUS ROADS! BeamNG", game: "BeamNG" },
+  { title: "BEAMNG COMP", game: "BeamNG" },
+  { title: "Every Time I Cross the Bridge.. I Get Heavier! BeamNG", game: "BeamNG" },
+  { title: "Stacking School Buses Until the Bridge Fails! | BeamNG", game: "BeamNG" },
+  { title: "Bridge Collapses Under Heavy Traffic! | BeamNG Realistic Destruction", game: "BeamNG" },
+  { title: "MOST Dangerous Roblox BUS DRIVING GAME?!", game: "BeamNG" },
+
+  // BESIEGE (batch 3)
+  { title: "Realistic Emergency WATER CRASH LANDINGS In Plane! Besiege", game: "Besiege" },
+
+  // CITY SKYLINES (batch 3)
+  { title: "City BELOW SEA LEVEL Meets MEGA TSUNAMI! | City Skylines 2", game: "City Skylines" },
+  { title: "Doing EVERYTHING I CAN to Destroy my CITY! Cities: Skylines", game: "City Skylines" },
+  { title: "Golden Gate Bridge vs NATURAL DISASTERS!", game: "City Skylines" },
+
+  // MINECRAFT (batch 3)
+  { title: "Villagers TRAPPED In A TSUNAMI RESCUE! Minecraft", game: "Minecraft" },
+  { title: "Queen Mary vs GIANT TSUNAMI WAVE! - Minecraft Survival", game: "Minecraft" },
+  { title: "Stopping a Tsunami Using ONLY CATS! Minecraft MODS!", game: "Minecraft" },
+
+  // PLANET COASTER (batch 3)
+  { title: "I Became a Millionaire with a 0% Survival Rate Theme Park! Planet Coaster 2", game: "Planet Coaster" },
+  { title: "100% vs 0% Roller Coaster SURVIVAL CHANCE! Planet Coaster 2", game: "Planet Coaster" },
+  { title: "I Built the Most ILLEGAL Theme Park Ever | Planet Coaster", game: "Planet Coaster" },
+
+  // OTHER (batch 3)
+  { title: "I Found the Best City Destruction Game on Roblox!", game: "Roblox" },
+  { title: "Tiny $1 Ship vs Giant $1,000,000 Ship Against an ICEBERG", game: "Other" },
+  { title: "I Built a Homemade TORNADO POD and Tested It! (escape pod)", game: "Other" },
+  { title: "I Built a Homemade TSUNAMI BUNKER and Tested It! PART 1", game: "Other" },
+  { title: "Will I be Deleting My Youtube Channel? Q&A", game: "Other" },
+  { title: "Finding the Best Train Crash Simulator on Roblox", game: "Roblox" },
+  { title: "Building the Safest Boat for Ultimate Survival! | Build a Boat", game: "Roblox" },
+  { title: "Testing My Homemade Tsunami Bunker vs Megalodons!", game: "Other" },
+  { title: "STORMWORKS COMP", game: "Stormworks" },
+  { title: "I Found the most OVERPOWERED SHIP EVER! (and sunk it) World Of Warships", game: "Other" },
+];
+
+const IDEAS = [
+  // TEARDOWN IDEAS
+  { title: "$1 Bridge vs $1,000,000 Bridge — Which Collapses First? Teardown", game: "Teardown" },
+  { title: "Dropping the HEAVIEST Object Ever onto the Golden Gate Bridge! Teardown", game: "Teardown" },
+  { title: "What Happens if a TSUNAMI and EARTHQUAKE Hit at the EXACT Same Time? Teardown", game: "Teardown" },
+  { title: "Every Natural Disaster vs New York — Which One Does the Most Damage? Teardown", game: "Teardown" },
+  { title: "I Tried to Destroy New York Using ONLY Water! Teardown", game: "Teardown" },
+  { title: "Last Bridge Standing — Every Natural Disaster Hits at Once! Teardown", game: "Teardown" },
+  { title: "Dropping a Cruise Ship From Space! Does it Survive? Teardown", game: "Teardown" },
+  { title: "$1 Skyscraper vs $1,000,000 Skyscraper — Which Collapses First? Teardown", game: "Teardown" },
+  { title: "I Tried to Destroy New York Using ONLY Planes! Teardown", game: "Teardown" },
+  { title: "What Happens if a Nuke Hits the Golden Gate Bridge? Teardown", game: "Teardown" },
+  { title: "Can the Eiffel Tower Survive a Mega Tsunami? Teardown", game: "Teardown" },
+  { title: "World's Heaviest Object vs World's Strongest Bridge! Teardown", game: "Teardown" },
+  { title: "Every Disaster Hits the Same Building — How Long Does It Last? Teardown", game: "Teardown" },
+  { title: "Can a Submarine Survive Being Dropped From a Skyscraper? Teardown", game: "Teardown" },
+  { title: "Tsunami vs Earthquake vs Tornado at the SAME TIME! Teardown", game: "Teardown" },
+  { title: "I Destroyed Every Famous Landmark Using Only Water! Teardown", game: "Teardown" },
+  { title: "Dropping 1,000 Cars Onto the Golden Gate Bridge! Teardown", game: "Teardown" },
+  { title: "The Titanic vs Every Bridge in the World! Teardown", game: "Teardown" },
+  { title: "What's the SMALLEST Thing That Can Collapse a Skyscraper? Teardown", game: "Teardown" },
+  { title: "Can a Paper Boat Sink the Titanic? Teardown Physics Test", game: "Teardown" },
+  { title: "Stacking Every Ship Until the Bridge Breaks! Teardown", game: "Teardown" },
+  { title: "Most Destructive Thing I've Ever Done in Teardown! (Compilation)", game: "Teardown" },
+  { title: "Destroying a City Using ONLY Sewage! Teardown", game: "Teardown" },
+  { title: "I Tried to Stop a Tsunami Using Only Walls! Teardown", game: "Teardown" },
+  { title: "$1 Bridge vs a Mega Tsunami — How Long Does it Last? Teardown", game: "Teardown" },
+  { title: "The World's Most Indestructible Building vs a Nuke! Teardown", game: "Teardown" },
+  { title: "What if Every Car in New York Exploded at Once? Teardown", game: "Teardown" },
+  { title: "Can a Single Domino Collapse an Entire City? Teardown", game: "Teardown" },
+  { title: "Building the Strongest Possible Bridge — Then Testing Every Vehicle! Teardown", game: "Teardown" },
+  { title: "Dropping the Moon on New York! Teardown Destruction", game: "Teardown" },
+
+  // STORMWORKS IDEAS
+  { title: "Building ULTIMATE Disaster-Proof Ship — Then Testing Every Disaster! Stormworks Part 1", game: "Stormworks" },
+  { title: "Can We Survive EVERY Ocean Disaster in One Trip? Stormworks", game: "Stormworks" },
+  { title: "$1 Lifeboat vs $1,000,000 Lifeboat — Which Saves More People? Stormworks", game: "Stormworks" },
+  { title: "I Pretended to Be a Rescue Ship Then Sank Everyone! Stormworks", game: "Stormworks" },
+  { title: "Can We Cross the Ocean in a $1 Boat? Stormworks", game: "Stormworks" },
+  { title: "Building a Ship That Runs on Sewage — Then Sailing It! Stormworks", game: "Stormworks" },
+  { title: "Surviving Back-to-Back-to-Back Tsunamis in One Voyage! Stormworks", game: "Stormworks" },
+  { title: "$1 Coast Guard Boat vs $1,000,000 Coast Guard Boat! Stormworks", game: "Stormworks" },
+  { title: "Can We Rescue 1,000 Survivors With One Lifeboat? Stormworks", game: "Stormworks" },
+  { title: "The Smallest Submarine vs the Deepest Ocean! Stormworks", game: "Stormworks" },
+  { title: "Racing a Tsunami to Shore — Who Wins? Stormworks", game: "Stormworks" },
+  { title: "I Built a Ship Out of Lifeboats — Then Sank It! Stormworks", game: "Stormworks" },
+  { title: "Every Type of Storm in One Voyage! Will We Survive? Stormworks", game: "Stormworks" },
+  { title: "Can a Homemade Raft Cross the North Sea? Stormworks", game: "Stormworks" },
+  { title: "Sailing Around the World in the Worst Ship Ever Built! Stormworks", game: "Stormworks" },
+  { title: "The Most Realistic Mayday Call Ever Simulated! Stormworks", game: "Stormworks" },
+  { title: "Building a Floating City — Then Destroying It! Stormworks", game: "Stormworks" },
+  { title: "Can We Outrun a Tsunami in a Coast Guard Helicopter? Stormworks", game: "Stormworks" },
+  { title: "I Spent 24 Hours Adrift at Sea in Stormworks — This Happened", game: "Stormworks" },
+  { title: "Last Ship Floating Wins! Every Disaster Hits at Once! Stormworks", game: "Stormworks" },
+  { title: "$1 Tsunami Bunker vs $1,000,000 Tsunami Bunker! Stormworks", game: "Stormworks" },
+  { title: "Building the Worst Possible Ship — Then Entering a Storm! Stormworks", game: "Stormworks" },
+  { title: "Nuclear Submarine vs Mega Tsunami — Does It Survive? Stormworks", game: "Stormworks" },
+  { title: "Testing Every Real Life Shipwreck Scenario in Stormworks!", game: "Stormworks" },
+
+  // ROBLOX IDEAS
+  { title: "1,000 Players Enter — Only 1 Lifeboat Spawns! Roblox", game: "Roblox" },
+  { title: "The Most Realistic Ship Sinking I've Ever Seen in Roblox!", game: "Roblox" },
+  { title: "$1 Ship vs $1,000,000 Ship vs Mega Tsunami! Last One Floating Wins! Roblox", game: "Roblox" },
+  { title: "I Pretended to Be a Pirate and Sank Every Ship I Found! Roblox", game: "Roblox" },
+  { title: "Can You Survive a Tsunami With ZERO Equipment? Roblox", game: "Roblox" },
+  { title: "Finding Every Hidden Secret in Roblox's Titanic Game!", game: "Roblox" },
+  { title: "100 Players Trapped on Sinking Titanic — Who Gets the Last Lifeboat? Roblox", game: "Roblox" },
+  { title: "I Spent 24 Hours as the Worst Captain in Roblox", game: "Roblox" },
+  { title: "The Hardest Sinking Ship Survival Challenge in Roblox!", game: "Roblox" },
+  { title: "Every Roblox Disaster Game Ranked From Worst to Best!", game: "Roblox" },
+  { title: "The Most Impossible Tsunami Escape Challenge in Roblox!", game: "Roblox" },
+  { title: "Finding the Most Broken Physics in Every Roblox Ship Game!", game: "Roblox" },
+  { title: "Can You Build an Unsinkable Ship in Roblox? We Tested It!", game: "Roblox" },
+  { title: "I Entered Every Roblox Disaster Game as a Complete Noob!", game: "Roblox" },
+  { title: "1v1 — Whose Ship Survives the Biggest Wave? Roblox", game: "Roblox" },
+  { title: "The World's Worst Lifeboat Design — Tested in Roblox!", game: "Roblox" },
+  { title: "Racing Every Ship to Safety Before the Tsunami Hits! Roblox", game: "Roblox" },
+  { title: "I Pretended to Be a Tsunami and Destroyed Everyone's Ships! Roblox", game: "Roblox" },
+  { title: "Building the Unsinkable Ship in Roblox — Then Hitting an Iceberg", game: "Roblox" },
+  { title: "Every Ship vs the Same Iceberg — Which Survives Longest? Roblox", game: "Roblox" },
+  { title: "Multiplayer Tsunami Survival — Last One Alive Wins! Roblox", game: "Roblox" },
+  { title: "The Titanic vs Every Obstacle in Roblox! Full Destruction Test", game: "Roblox" },
+  { title: "Surviving Every Natural Disaster Using Only a Raft! Roblox", game: "Roblox" },
+  { title: "Most Extreme Roblox Ship Destruction Compilation 2026!", game: "Roblox" },
+  { title: "1,000 Passengers, One Tsunami — How Many Survive? Roblox", game: "Roblox" },
+  { title: "The Most Realistic Tsunami Game on Roblox in 2026!", game: "Roblox" },
+  { title: "I Spent 24 Hours as Captain of the Titanic in Roblox", game: "Roblox" },
+  { title: "$1 Ship vs $1,000,000 Ship vs Iceberg — Last One Floating Wins! Roblox", game: "Roblox" },
+
+  // BEAMNG IDEAS
+  { title: "Every Vehicle vs the Same Cliff — Which Survives? BeamNG", game: "BeamNG" },
+  { title: "$1 Car vs $1,000,000 Car — Bridge Collapse Test! BeamNG", game: "BeamNG" },
+  { title: "The World's Heaviest Truck vs the World's Weakest Bridge! BeamNG", game: "BeamNG" },
+  { title: "I Tried to Cross Every Bridge Without Breaking Any! BeamNG", game: "BeamNG" },
+  { title: "Last Car Crossing the Bridge Before It Collapses! BeamNG", game: "BeamNG" },
+  { title: "Stacking 1,000 Cars on a Bridge Until It Breaks! BeamNG", game: "BeamNG" },
+  { title: "Most Realistic Car Crash Physics Test Ever! BeamNG", game: "BeamNG" },
+  { title: "Can a School Bus Survive Being Dropped From a Skyscraper? BeamNG", game: "BeamNG" },
+  { title: "Racing a Collapsing Bridge — Can You Outrun It? BeamNG", game: "BeamNG" },
+  { title: "Every Real Life Bridge Collapse Recreated in BeamNG!", game: "BeamNG" },
+
+  // CITY SKYLINES IDEAS
+  { title: "Building the World's Most Disaster-Prone City on Purpose! City Skylines 2", game: "City Skylines" },
+  { title: "What if Every Road in the City Was a Sewage Pipe? City Skylines 2", game: "City Skylines" },
+  { title: "Can a City Survive If All Power Comes From Flooding? City Skylines 2", game: "City Skylines" },
+  { title: "I Gave Every Citizen Poisoned Water — Here's What Happened! City Skylines 2", game: "City Skylines" },
+  { title: "Building a City Underground — Then Flooding It! City Skylines 2", game: "City Skylines" },
+  { title: "What Happens if a Tsunami Hits Every 60 Seconds? City Skylines 2", game: "City Skylines" },
+  { title: "The Most Chaotic City Ever Built — No Rules, No Laws! City Skylines 2", game: "City Skylines" },
+  { title: "I Built a City With ZERO Infrastructure — Then Watched it Die! City Skylines 2", game: "City Skylines" },
+  { title: "Can a City Survive Being Built Inside a Volcano? City Skylines 2", game: "City Skylines" },
+  { title: "Filling an Entire City With Lava — How Long Until It Collapses? City Skylines 2", game: "City Skylines" },
+  { title: "Building a City That Runs Entirely on Disaster — Then Watching It Die! City Skylines 2", game: "City Skylines" },
+  { title: "What if Every Pipe in the City Bursts at Once? City Skylines 2", game: "City Skylines" },
+
+  // MINECRAFT IDEAS
+  { title: "Can a Minecraft Bunker Survive Every Natural Disaster Back to Back? Part 1", game: "Minecraft" },
+  { title: "Building the World's Strongest Dam — Then Breaking It! Minecraft", game: "Minecraft" },
+  { title: "Surviving 100 Days in a Minecraft World With Only Tsunamis!", game: "Minecraft" },
+  { title: "$1 Bunker vs $1,000,000 Bunker — Which Survives the Tsunami? Minecraft", game: "Minecraft" },
+  { title: "I Filled an Entire Minecraft Ocean With Lava — Then This Happened!", game: "Minecraft" },
+
+  // FLOATING SANDBOX IDEAS
+  { title: "$1 Ship vs $1,000,000 Ship — Which Sinks First? Floating Sandbox", game: "Floating Sandbox" },
+  { title: "Every Real Life Shipwreck Recreated! Floating Sandbox", game: "Floating Sandbox" },
+  { title: "Can the World's Biggest Ship Survive a Mega Tsunami? Floating Sandbox", game: "Floating Sandbox" },
+  { title: "Stacking Every Ship in the Game Until Something Breaks! Floating Sandbox", game: "Floating Sandbox" },
+  { title: "The Most Realistic Titanic Sinking Ever Simulated! Floating Sandbox", game: "Floating Sandbox" },
+
+  // TEARDOWN IDEAS (batch 2)
+  { title: "Dropping a NUCLEAR BOMB on Every Famous City! Teardown", game: "Teardown" },
+  { title: "What if Every Building in New York Was Made of Glass? Teardown", game: "Teardown" },
+  { title: "Can a Single Tsunami Wipe Out an Entire Country? Teardown", game: "Teardown" },
+  { title: "The World's Strongest Bunker vs Every Weapon Ever! Teardown", game: "Teardown" },
+  { title: "Stacking 1,000 Planes Until the Bridge Collapses! Teardown", game: "Teardown" },
+  { title: "I Tried to Destroy London Using Only Water! Teardown", game: "Teardown" },
+  { title: "Every Famous Bridge Destroyed by a Mega Tsunami! Teardown", game: "Teardown" },
+  { title: "What Happens if You Drop the Moon on a City? Teardown", game: "Teardown" },
+  { title: "Can a Paper Bridge Hold a Real Train? Teardown Physics", game: "Teardown" },
+  { title: "The Smallest Explosion That Can Collapse a Skyscraper! Teardown", game: "Teardown" },
+  { title: "$1 City vs $1,000,000 City — Which Survives Longer? Teardown", game: "Teardown" },
+  { title: "What if Every Road Was a River? Teardown Destruction", game: "Teardown" },
+  { title: "Dropping Every Vehicle From Space — Which Survives? Teardown", game: "Teardown" },
+  { title: "The World's Tallest Building vs a Direct Nuke Strike! Teardown", game: "Teardown" },
+  { title: "I Tried to Build a Wall Strong Enough to Stop a Tsunami! Teardown", game: "Teardown" },
+  { title: "Every Natural Disaster Hits Paris at the Same Time! Teardown", game: "Teardown" },
+  { title: "What's the MAXIMUM Damage One Plane Can Do? Teardown", game: "Teardown" },
+  { title: "Can a Submarine Survive a 10,000 Foot Drop? Teardown", game: "Teardown" },
+  { title: "Filling New York With Concrete — Then Detonating It! Teardown", game: "Teardown" },
+  { title: "I Destroyed the Entire World Using Only Dominoes! Teardown", game: "Teardown" },
+  { title: "The Golden Gate Bridge vs 1,000 Planes! Teardown", game: "Teardown" },
+  { title: "What if Every Car Was a Bomb? Teardown City Destruction", game: "Teardown" },
+  { title: "Collapsing Every Skyscraper in New York Simultaneously! Teardown", game: "Teardown" },
+  { title: "The Most Realistic Nuclear Blast Ever Simulated! Teardown", game: "Teardown" },
+  { title: "Building the World's Longest Bridge — Then Destroying It! Teardown", game: "Teardown" },
+  { title: "What Happens if the Ocean Rises 1,000 Feet Instantly? Teardown", game: "Teardown" },
+  { title: "Every Weapon vs the Eiffel Tower — Which Wins? Teardown", game: "Teardown" },
+  { title: "The Titanic vs Every Famous Landmark! Teardown", game: "Teardown" },
+  { title: "Can You Stop a Tsunami With a Wall of Cars? Teardown", game: "Teardown" },
+  { title: "I Dropped 10,000 Bombs on London! Teardown Destruction", game: "Teardown" },
+  { title: "The Most Satisfying Bridge Collapse Ever! Teardown", game: "Teardown" },
+  { title: "What if Gravity Was 10x Stronger? Teardown Physics", game: "Teardown" },
+  { title: "Replacing All Roads With Water — What Happens? Teardown", game: "Teardown" },
+  { title: "The World's Worst Earthquake vs the World's Strongest Building! Teardown", game: "Teardown" },
+  { title: "I Tried to Recreate Every Famous Disaster in History! Teardown", game: "Teardown" },
+  { title: "Dropping the ISS onto New York! Teardown", game: "Teardown" },
+  { title: "Every Ship Ever Made vs the Same Iceberg! Teardown", game: "Teardown" },
+  { title: "What if Every Skyscraper Was Made of Ice? Teardown", game: "Teardown" },
+  { title: "The Most Catastrophic Flood in History — Simulated! Teardown", game: "Teardown" },
+  { title: "I Built a City Underwater — Then Drained It! Teardown", game: "Teardown" },
+  { title: "Launching 1,000 Rockets at Once — What Happens? Teardown", game: "Teardown" },
+  { title: "The Smallest Car vs the Biggest Bridge — Does It Collapse? Teardown", game: "Teardown" },
+  { title: "What if New York Had No Foundations? Teardown", game: "Teardown" },
+  { title: "Every Famous Explosion Recreated in Teardown!", game: "Teardown" },
+  { title: "Stacking Cruise Ships Until Something Breaks! Teardown", game: "Teardown" },
+  { title: "I Tried to Outrun a Shockwave on Foot! Teardown", game: "Teardown" },
+  { title: "The World's Biggest Avalanche vs a City! Teardown", game: "Teardown" },
+  { title: "What Happens if Every Pipe in a City Bursts at Once? Teardown", game: "Teardown" },
+  { title: "Filling the Grand Canyon With Water — Then Releasing It! Teardown", game: "Teardown" },
+  { title: "I Destroyed Sydney, Tokyo and New York in One Video! Teardown", game: "Teardown" },
+  { title: "The Weakest Bridge vs the Heaviest Object! Teardown", game: "Teardown" },
+  { title: "What if the Sun Hit Earth? Teardown Destruction", game: "Teardown" },
+  { title: "Every Car Ever Made vs the Same Wall — Which Survives? Teardown", game: "Teardown" },
+  { title: "The Most Realistic Asteroid Impact Ever Simulated! Teardown", game: "Teardown" },
+  { title: "I Tried to Defend a City From Every Disaster at Once! Teardown", game: "Teardown" },
+  { title: "Can a Single Domino Chain Collapse an Entire City? Teardown", game: "Teardown" },
+  { title: "What Happens When Two Mega Tsunamis Collide? Teardown", game: "Teardown" },
+  { title: "Dropping Everything I Own onto the Golden Gate Bridge! Teardown", game: "Teardown" },
+  { title: "The World's Longest Avalanche vs a Skyscraper! Teardown", game: "Teardown" },
+  { title: "I Built the Most Indestructible City — Then Tested Every Disaster! Teardown", game: "Teardown" },
+  { title: "What if Every Building Was a Skyscraper? Then Destroy Them All! Teardown", game: "Teardown" },
+  { title: "Every Famous Shipwreck Recreated on Land! Teardown", game: "Teardown" },
+  { title: "The Biggest Controlled Demolition Ever Simulated! Teardown", game: "Teardown" },
+  { title: "I Tried to Collapse a Bridge Using Only Feathers! Teardown", game: "Teardown" },
+  { title: "What if Lava Replaced All Roads Overnight? Teardown", game: "Teardown" },
+  { title: "Every Historical Disaster Recreated — Which Was Worst? Teardown", game: "Teardown" },
+  { title: "The Most Destructive Chain Reaction Ever Made! Teardown", game: "Teardown" },
+  { title: "I Fired Every Weapon in the Game at One Bridge — This Happened! Teardown", game: "Teardown" },
+  { title: "What if a Black Hole Appeared in New York? Teardown", game: "Teardown" },
+  { title: "The Most Realistic Volcano Eruption Ever Simulated! Teardown", game: "Teardown" },
+  { title: "Can a City Survive if Every Dam Breaks at Once? Teardown", game: "Teardown" },
+  { title: "Dropping 1,000 Nukes in a Line — What Happens? Teardown", game: "Teardown" },
+  { title: "I Built the Strongest Possible Dam — Then Broke It! Teardown", game: "Teardown" },
+  { title: "The World's Biggest Explosion vs the World's Strongest Bunker! Teardown", game: "Teardown" },
+
+  // STORMWORKS IDEAS (batch 2)
+  { title: "Can We Sail Around the World Without Sinking? Stormworks", game: "Stormworks" },
+  { title: "Building a $1 Aircraft Carrier — Then Testing It! Stormworks", game: "Stormworks" },
+  { title: "The Worst Ship Design That Actually Floats! Stormworks", game: "Stormworks" },
+  { title: "Can We Survive a Category 5 Hurricane in a Rowing Boat? Stormworks", game: "Stormworks" },
+  { title: "Every Real Life Maritime Disaster Recreated! Stormworks", game: "Stormworks" },
+  { title: "I Spent a Week at Sea With No Engine! Stormworks Survival", game: "Stormworks" },
+  { title: "Building the Most Disaster-Proof Submarine Ever! Stormworks", game: "Stormworks" },
+  { title: "Racing the World's Fastest Ship Against a Tsunami! Stormworks", game: "Stormworks" },
+  { title: "Can a Homemade Raft Survive a Mega Storm? Stormworks", game: "Stormworks" },
+  { title: "I Tried to Rescue 1,000 People With One Boat! Stormworks", game: "Stormworks" },
+  { title: "The Most Realistic Oil Tanker Disaster Simulated! Stormworks", game: "Stormworks" },
+  { title: "Building a Ship Made Entirely of Lifeboats! Stormworks", game: "Stormworks" },
+  { title: "Can We Cross the Pacific in a $1 Dinghy? Stormworks", game: "Stormworks" },
+  { title: "Surviving the North Sea in the Worst Winter Storm! Stormworks", game: "Stormworks" },
+  { title: "I Built a Flying Boat — Then Crashed It Into the Ocean! Stormworks", game: "Stormworks" },
+  { title: "The Titanic's Final Hours — Perfectly Recreated! Stormworks", game: "Stormworks" },
+  { title: "Building the World's Longest Ship — Then Sinking It! Stormworks", game: "Stormworks" },
+  { title: "Can We Survive a Tsunami in a Submarine? Stormworks", game: "Stormworks" },
+  { title: "I Pretended to Be a Pirate and Attacked Every Ship! Stormworks", game: "Stormworks" },
+  { title: "The World's Smallest Submarine vs the Deepest Trench! Stormworks", game: "Stormworks" },
+  { title: "Building a Ship Out of Ice — Then Sailing It South! Stormworks", game: "Stormworks" },
+  { title: "Can a Coast Guard Boat Survive Being Hit by a Cruise Ship? Stormworks", game: "Stormworks" },
+  { title: "Every Type of Ship Destruction in One Video! Stormworks", game: "Stormworks" },
+  { title: "I Built a Ship with No Hull — Then Sailed It! Stormworks", game: "Stormworks" },
+  { title: "Racing Every Ship in the Game — Last One Sinking Wins! Stormworks", game: "Stormworks" },
+  { title: "Building the Worst Possible Aircraft Carrier! Stormworks", game: "Stormworks" },
+  { title: "Can a Rubber Dinghy Survive a Category 5 Hurricane? Stormworks", game: "Stormworks" },
+  { title: "The Most Realistic Submarine Rescue Ever Simulated! Stormworks", game: "Stormworks" },
+  { title: "I Spent 24 Hours Underwater in a Submarine! Stormworks", game: "Stormworks" },
+  { title: "Every Ship vs the Same Rogue Wave — Which Survives? Stormworks", game: "Stormworks" },
+  { title: "Building a Ship Using Only the Cheapest Parts! Stormworks", game: "Stormworks" },
+  { title: "Can We Deliver a Nuke Across the Ocean Without Sinking? Stormworks", game: "Stormworks" },
+  { title: "The Most Catastrophic Cruise Ship Disaster Simulated! Stormworks", game: "Stormworks" },
+  { title: "I Built a Ship That's Also a Submarine! Stormworks", game: "Stormworks" },
+  { title: "Can We Survive a Mega Tsunami in a Kayak? Stormworks", game: "Stormworks" },
+  { title: "The World's Biggest Ship vs the World's Biggest Wave! Stormworks", game: "Stormworks" },
+  { title: "Building a Cargo Ship Out of Lifeboats! Stormworks", game: "Stormworks" },
+  { title: "Every Disaster Hits Our Ship at Once — Do We Survive? Stormworks", game: "Stormworks" },
+  { title: "I Pretended to Be a Rescue Helicopter and Crashed Everyone! Stormworks", game: "Stormworks" },
+  { title: "The Most Realistic Mayday Emergency Ever! Stormworks", game: "Stormworks" },
+  { title: "Can We Sail Through a Hurricane Backwards? Stormworks", game: "Stormworks" },
+  { title: "Building the Safest Possible Ship — Then Testing the Worst Disaster! Stormworks", game: "Stormworks" },
+  { title: "$1 Navy Warship vs $1,000,000 Navy Warship! Stormworks", game: "Stormworks" },
+  { title: "Every Real Life Coast Guard Rescue Simulated! Stormworks", game: "Stormworks" },
+  { title: "I Built a Ship That Runs on Explosions! Stormworks", game: "Stormworks" },
+  { title: "Can We Outrun Every Disaster in One Boat? Stormworks", game: "Stormworks" },
+  { title: "The Longest Distance Ever Sailed in Stormworks!", game: "Stormworks" },
+  { title: "I Tried to Deliver Cargo Through Every Storm! Stormworks", game: "Stormworks" },
+  { title: "Building the Ultimate Survival Raft — Then Testing a Mega Tsunami! Stormworks", game: "Stormworks" },
+  { title: "Can a Nuclear Sub Survive Being Crushed at Max Depth? Stormworks", game: "Stormworks" },
+  { title: "Every Ship Sinking Scenario Tested in One Video! Stormworks", game: "Stormworks" },
+  { title: "I Built a Ship With 100 Engines — Then Crashed It! Stormworks", game: "Stormworks" },
+  { title: "Racing to Shore Before the Tsunami Hits — Did We Make It? Stormworks", game: "Stormworks" },
+  { title: "The Most Realistic Iceberg Collision Ever! Stormworks", game: "Stormworks" },
+  { title: "Can We Build a Ship Faster Than It Sinks? Stormworks", game: "Stormworks" },
+  { title: "Sinking Ships in Slow Motion — This is What Happens! Stormworks", game: "Stormworks" },
+  { title: "I Became a One-Man Coast Guard — Here's What Happened! Stormworks", game: "Stormworks" },
+  { title: "Every Real Life Ship Disaster From Worst to Best Simulated! Stormworks", game: "Stormworks" },
+  { title: "Building a Ship With No Ballast — Then Hitting a Storm! Stormworks", game: "Stormworks" },
+  { title: "The World's Most Realistic Shipwreck Simulation! Stormworks", game: "Stormworks" },
+
+  // ROBLOX IDEAS (batch 2)
+  { title: "10,000 Players vs One Tsunami — How Many Survive? Roblox", game: "Roblox" },
+  { title: "The Most Broken Physics in Roblox Ship Games! Compilation", game: "Roblox" },
+  { title: "I Pretended to Be a Disaster Admin and Trolled Everyone! Roblox", game: "Roblox" },
+  { title: "Finding Every Secret Room in Roblox's Most Popular Disaster Games!", game: "Roblox" },
+  { title: "The Hardest Natural Disaster Survival Challenge in Roblox History!", game: "Roblox" },
+  { title: "1v1,000 — Can One Ship Sink the Entire Server? Roblox", game: "Roblox" },
+  { title: "I Spent a Week Playing Every Roblox Disaster Game — Here's the Best!", game: "Roblox" },
+  { title: "The Most Realistic Sinking Ship I've Found in Roblox 2026!", game: "Roblox" },
+  { title: "Every Roblox Titanic Game Ranked From Worst to Best!", game: "Roblox" },
+  { title: "Can You Survive a Tsunami With Your Eyes Closed? Roblox", game: "Roblox" },
+  { title: "I Built the Worst Possible Lifeboat — Then Tested It! Roblox", game: "Roblox" },
+  { title: "The Last Player Alive in Every Disaster Wins $1,000! Roblox", game: "Roblox" },
+  { title: "I Pretended to Be a Tsunami and Sank the Entire Server! Roblox", game: "Roblox" },
+  { title: "Finding the Most Overpowered Weapon in Every Roblox Ship Game!", game: "Roblox" },
+  { title: "100 Rounds of Titanic Survival — Who's the Best? Roblox", game: "Roblox" },
+  { title: "The Most Realistic Physics in Any Roblox Game — Tested!", game: "Roblox" },
+  { title: "Can a $1 Raft Survive a $1,000,000 Storm? Roblox", game: "Roblox" },
+  { title: "I Entered a Roblox Sinking Ship Tournament — This Happened!", game: "Roblox" },
+  { title: "Every Roblox Ship Game Speedrun — Fastest Survivor Wins!", game: "Roblox" },
+  { title: "The Titanic vs 1,000 Torpedoes — Does Anything Survive? Roblox", game: "Roblox" },
+  { title: "I Found the Most Hidden Easter Egg in Roblox Titanic!", game: "Roblox" },
+  { title: "Can You Survive Every Roblox Natural Disaster in a Row?", game: "Roblox" },
+  { title: "Racing to the Last Lifeboat — 1,000 Players, 1 Spot! Roblox", game: "Roblox" },
+  { title: "The Most Chaotic Multiplayer Disaster Game in Roblox!", game: "Roblox" },
+  { title: "I Pretended to Be the Captain and Sailed Into Every Storm! Roblox", game: "Roblox" },
+  { title: "Every Roblox Disaster Game — But I Can Only Use a Raft!", game: "Roblox" },
+  { title: "1,000 Rounds of Ship Destruction — Who's Left Standing? Roblox", game: "Roblox" },
+  { title: "Finding the Fastest Ship in Every Roblox Game!", game: "Roblox" },
+  { title: "The Most Unrealistic Physics in Roblox — Ranked!", game: "Roblox" },
+  { title: "I Survived Every Tsunami in Roblox Using Only Luck!", game: "Roblox" },
+  { title: "Can You Build a Tsunami-Proof Base in Roblox? We Tested It!", game: "Roblox" },
+  { title: "Every New Roblox Ship Game in 2026 — Ranked!", game: "Roblox" },
+  { title: "The Roblox Disaster Game That Nearly Broke My PC!", game: "Roblox" },
+  { title: "I Beat Every Roblox Survival Game Without Dying!", game: "Roblox" },
+  { title: "Can You Outswim a Tsunami in Roblox?", game: "Roblox" },
+  { title: "1,000 Players All Jump at Once — Does the Ship Sink Faster? Roblox", game: "Roblox" },
+  { title: "Every Roblox Game Where You Can Sink the Titanic — Tested!", game: "Roblox" },
+  { title: "The Most Satisfying Ship Destruction in Roblox History!", game: "Roblox" },
+  { title: "I Pretended to Be a Journalist Covering Every Disaster! Roblox", game: "Roblox" },
+  { title: "Can You Survive a Roblox Tsunami Inside a Car?", game: "Roblox" },
+  { title: "The Longest Roblox Disaster Survival Streak — World Record Attempt!", game: "Roblox" },
+  { title: "Every Roblox Ship Game Boss Battle — Ranked!", game: "Roblox" },
+  { title: "I Found the Most Realistic Flood in Any Roblox Game!", game: "Roblox" },
+  { title: "Can a Roblox Skyscraper Survive Every Disaster in a Row?", game: "Roblox" },
+  { title: "The Most Intense Multiplayer Titanic Survival in Roblox!", game: "Roblox" },
+  { title: "I Trolled an Entire Server by Removing All Lifeboats! Roblox", game: "Roblox" },
+  { title: "Every Roblox Sinking Game But the Physics Are Cranked to Max!", game: "Roblox" },
+  { title: "Can You Survive if the Ship Sinks Instantly? Roblox", game: "Roblox" },
+  { title: "The Highest Player Count in a Roblox Disaster Game — Record Attempt!", game: "Roblox" },
+  { title: "I Spent 30 Days Playing Only Roblox Disaster Games — Here's What Happened!", game: "Roblox" },
+  { title: "Every Ship in Roblox Ranked by How Fast It Sinks!", game: "Roblox" },
+  { title: "The Hardest Roblox Escape Challenge — No One Has Done This!", game: "Roblox" },
+  { title: "I Found a Roblox Game That Perfectly Simulates Real Shipwrecks!", game: "Roblox" },
+  { title: "Can You Survive a Tsunami on a Bike in Roblox?", game: "Roblox" },
+  { title: "The Most Realistic Ocean Physics in Roblox 2026!", game: "Roblox" },
+  { title: "Every Hidden Mechanic in Roblox's Best Sinking Game!", game: "Roblox" },
+  { title: "I Challenged 1,000 Players to Survive My Custom Disaster! Roblox", game: "Roblox" },
+  { title: "Can 10 Players Working Together Stop a Mega Tsunami? Roblox", game: "Roblox" },
+  { title: "The Roblox Ship That Can Never Sink — We Tested Everything!", game: "Roblox" },
+  { title: "I Played Every Roblox Disaster Game For 24 Hours Straight!", game: "Roblox" },
+  { title: "Finding the Absolute Worst Roblox Survival Game in 2026!", game: "Roblox" },
+  { title: "Every Roblox Ship Game Secret Weapon — Ranked!", game: "Roblox" },
+  { title: "The Most Intense Roblox Survival Challenge I've Ever Done!", game: "Roblox" },
+  { title: "Can You Survive a Mega Tsunami With Zero Preparation? Roblox", game: "Roblox" },
+  { title: "I Recreated Famous Shipwrecks in Roblox — This is What Happened!", game: "Roblox" },
+
+  // BEAMNG IDEAS (batch 2)
+  { title: "The World's Most Dangerous Road vs Every Vehicle! BeamNG", game: "BeamNG" },
+  { title: "$1 Car vs $1,000,000 Car — Cliff Drop Test! BeamNG", game: "BeamNG" },
+  { title: "Stacking Every Vehicle Until the Bridge Breaks! BeamNG", game: "BeamNG" },
+  { title: "Can a School Bus Outrun a Collapsing Bridge? BeamNG", game: "BeamNG" },
+  { title: "Every Real Life Car Crash Recreated in BeamNG!", game: "BeamNG" },
+  { title: "The Most Realistic Train Derailment Simulation! BeamNG", game: "BeamNG" },
+  { title: "I Tried to Cross Every Broken Bridge in the Game! BeamNG", game: "BeamNG" },
+  { title: "Racing a Falling Boulder Down a Mountain! BeamNG", game: "BeamNG" },
+  { title: "The Heaviest Object vs the Weakest Bridge! BeamNG", game: "BeamNG" },
+  { title: "Can a Supercar Survive Being Hit by a Train? BeamNG", game: "BeamNG" },
+  { title: "I Dropped Every Vehicle From the Highest Point! BeamNG", game: "BeamNG" },
+  { title: "The Most Satisfying Car Crash Compilation! BeamNG", game: "BeamNG" },
+  { title: "What Happens if 1,000 Cars Use the Same Bridge? BeamNG", game: "BeamNG" },
+  { title: "I Tried to Drive on a Bridge That's Actively Collapsing! BeamNG", game: "BeamNG" },
+  { title: "Every Vehicle vs a Concrete Wall at Max Speed! BeamNG", game: "BeamNG" },
+  { title: "The World's Most Indestructible Car — Tested! BeamNG", game: "BeamNG" },
+  { title: "Can a Tank Survive Being Dropped From Space? BeamNG", game: "BeamNG" },
+  { title: "The Longest Car Jump That Actually Survived! BeamNG", game: "BeamNG" },
+  { title: "Every Real Life Bridge Failure Recreated! BeamNG", game: "BeamNG" },
+  { title: "I Built a Ramp and Jumped Every Vehicle — Which Goes Furthest? BeamNG", game: "BeamNG" },
+  { title: "The Most Realistic Avalanche a Car Has Ever Survived! BeamNG", game: "BeamNG" },
+  { title: "Can You Drive Through a Building Collapse and Survive? BeamNG", game: "BeamNG" },
+  { title: "I Tried to Outrun Every Natural Disaster in a Car! BeamNG", game: "BeamNG" },
+  { title: "Every Bus vs the Same Cliff — Which Survives Longest? BeamNG", game: "BeamNG" },
+  { title: "The Slowest Speed at Which a Car Can Destroy a Bridge! BeamNG", game: "BeamNG" },
+  { title: "I Tried to Cross a Bridge Using Only the Smallest Car! BeamNG", game: "BeamNG" },
+  { title: "Can an Armoured Truck Survive a Direct Train Hit? BeamNG", game: "BeamNG" },
+  { title: "The Worst Road in the World — Every Vehicle Tested! BeamNG", game: "BeamNG" },
+  { title: "Every Truck vs the Same Wall — Which Does Most Damage? BeamNG", game: "BeamNG" },
+  { title: "I Drove Every Emergency Vehicle Off the Same Bridge! BeamNG", game: "BeamNG" },
+
+  // CITY SKYLINES IDEAS (batch 2)
+  { title: "What if Every Building Was a Sewage Plant? City Skylines 2", game: "City Skylines" },
+  { title: "Building the Most Overpopulated City Ever — Then Destroying It! City Skylines 2", game: "City Skylines" },
+  { title: "Can a City Survive if Every Bridge Collapses at Once? City Skylines 2", game: "City Skylines" },
+  { title: "What if It Never Stopped Raining? City Skylines 2", game: "City Skylines" },
+  { title: "I Built a City With Only One Road — Then Added a Million Citizens! City Skylines 2", game: "City Skylines" },
+  { title: "The Most Polluted City Ever Built — Then Cleaned Up! City Skylines 2", game: "City Skylines" },
+  { title: "What if Every Citizen Had Their Own Sewage Line? City Skylines 2", game: "City Skylines" },
+  { title: "Building a City That's 100% Powered by Disasters! City Skylines 2", game: "City Skylines" },
+  { title: "Can a City Function With Zero Roads? City Skylines 2", game: "City Skylines" },
+  { title: "What Happens if You Give a City Infinite Money Then a Mega Disaster? City Skylines 2", game: "City Skylines" },
+  { title: "I Built the Worst Possible Traffic System — Then Added Tsunamis! City Skylines 2", game: "City Skylines" },
+  { title: "Every City Disaster Ranked by How Much Damage It Does! City Skylines 2", game: "City Skylines" },
+  { title: "Building a City Inside a Volcano — Then Erupting It! City Skylines 2", game: "City Skylines" },
+  { title: "What if Every Citizen Was a Sewage Worker? City Skylines 2", game: "City Skylines" },
+  { title: "I Tried to Build the Most Efficient City — Then Destroyed It! City Skylines 2", game: "City Skylines" },
+  { title: "Can a City Survive With Only Underground Roads? City Skylines 2", game: "City Skylines" },
+  { title: "The Most Chaotic City Planning Challenge Ever! City Skylines 2", game: "City Skylines" },
+  { title: "What if Every Park Was a Sewage Dump? City Skylines 2", game: "City Skylines" },
+  { title: "Building a Floating City — Then Adding a Tsunami! City Skylines 2", game: "City Skylines" },
+  { title: "I Made Every Law in the City Illegal — Here's What Happened! City Skylines 2", game: "City Skylines" },
+  { title: "The Fastest Way to Destroy a City in City Skylines 2!", game: "City Skylines" },
+  { title: "What if Every Power Plant Was Nuclear and They All Melted Down? City Skylines 2", game: "City Skylines" },
+  { title: "Building a Perfect City — Then Removing All the Water! City Skylines 2", game: "City Skylines" },
+  { title: "The Most Extreme Overpopulation Challenge! City Skylines 2", game: "City Skylines" },
+  { title: "I Built a City With No Emergency Services — Then Added Every Disaster! City Skylines 2", game: "City Skylines" },
+
+  // MINECRAFT IDEAS (batch 2)
+  { title: "Every Natural Disaster Hits the Same Minecraft World — What Survives?", game: "Minecraft" },
+  { title: "Building the World's Strongest Bunker in Minecraft — 10 Disaster Test!", game: "Minecraft" },
+  { title: "Can a Minecraft Village Survive a Mega Tsunami? Survival Test", game: "Minecraft" },
+  { title: "I Flooded an Entire Minecraft World — Then Built on Top!", game: "Minecraft" },
+  { title: "The Most Realistic Earthquake Ever in Minecraft!", game: "Minecraft" },
+  { title: "Can You Survive 100 Days in a Minecraft World With Daily Tsunamis?", game: "Minecraft" },
+  { title: "Building a Minecraft City Underwater — Then Draining It!", game: "Minecraft" },
+  { title: "Every Minecraft Disaster Mod Ranked From Worst to Best!", game: "Minecraft" },
+  { title: "I Tried to Outrun a Tsunami in Minecraft — This Happened!", game: "Minecraft" },
+  { title: "The Most Destructive Minecraft Mod Ever Tested!", game: "Minecraft" },
+  { title: "Can a Minecraft Skyscraper Survive a Direct Asteroid Hit?", game: "Minecraft" },
+  { title: "Building a Dam in Minecraft — Then Breaking It at Maximum Flood!", game: "Minecraft" },
+  { title: "Every Minecraft Natural Disaster at the Highest Difficulty!", game: "Minecraft" },
+  { title: "I Tried to Survive With Only a Wooden Plank During a Tsunami! Minecraft", game: "Minecraft" },
+  { title: "The Biggest Explosion Possible in Vanilla Minecraft!", game: "Minecraft" },
+  { title: "Can Redstone Save a Minecraft City From Destruction?", game: "Minecraft" },
+  { title: "Building the Most Fortified Castle — Then Throwing Every Disaster at It! Minecraft", game: "Minecraft" },
+  { title: "The Most Realistic Flood Physics Mod in Minecraft 2026!", game: "Minecraft" },
+  { title: "Can You Build a Tsunami-Proof House in Survival Mode? Minecraft", game: "Minecraft" },
+  { title: "Every Minecraft Boss vs a Mega Tsunami — Who Wins?", game: "Minecraft" },
+  { title: "I Spent 100 Days Rebuilding After Every Disaster! Minecraft", game: "Minecraft" },
+  { title: "The Most Chaotic Natural Disaster Seed in Minecraft!", game: "Minecraft" },
+  { title: "Can a Single Villager Survive Every Disaster? Minecraft", game: "Minecraft" },
+  { title: "Building a Sky City in Minecraft — Then Destroying Every Support!", game: "Minecraft" },
+  { title: "The Most Realistic Volcano Mod Ever Tested in Minecraft!", game: "Minecraft" },
+
+  // FLOATING SANDBOX IDEAS (batch 2)
+  { title: "Every Real Life Shipwreck Perfectly Recreated! Floating Sandbox", game: "Floating Sandbox" },
+  { title: "What Happens if You Fill a Ship With Concrete? Floating Sandbox", game: "Floating Sandbox" },
+  { title: "The Titanic vs Every Weapon Ever Made! Floating Sandbox", game: "Floating Sandbox" },
+  { title: "Can the World's Biggest Ship Survive the World's Biggest Wave? Floating Sandbox", game: "Floating Sandbox" },
+  { title: "I Tried to Keep a Ship Afloat Using Only Patches! Floating Sandbox", game: "Floating Sandbox" },
+  { title: "Every Historical Ship Disaster Recreated! Floating Sandbox", game: "Floating Sandbox" },
+  { title: "What's the Smallest Hole That Can Sink the Titanic? Floating Sandbox", game: "Floating Sandbox" },
+  { title: "Can a Ship Survive If You Remove Half the Hull? Floating Sandbox", game: "Floating Sandbox" },
+  { title: "The Most Realistic Iceberg Collision in Any Game! Floating Sandbox", game: "Floating Sandbox" },
+  { title: "I Tried to Sink a Ship Using Only Fish! Floating Sandbox", game: "Floating Sandbox" },
+  { title: "Every Ship vs a Black Hole — What Happens? Floating Sandbox", game: "Floating Sandbox" },
+  { title: "Building the Most Unsinkable Ship Possible — Then Testing Everything! Floating Sandbox", game: "Floating Sandbox" },
+  { title: "What Happens if Two Titanics Collide Head On at Full Speed? Floating Sandbox", game: "Floating Sandbox" },
+  { title: "Can a Submarine Survive Being Hit by a Cruise Ship? Floating Sandbox", game: "Floating Sandbox" },
+  { title: "I Filled Every Compartment With Something Different — Which Sinks First? Floating Sandbox", game: "Floating Sandbox" },
+  { title: "The Smallest Bomb That Can Sink the Biggest Ship! Floating Sandbox", game: "Floating Sandbox" },
+  { title: "Every Ship Material Tested — Which Is the Most Durable? Floating Sandbox", game: "Floating Sandbox" },
+  { title: "What Happens if You Freeze the Ocean Mid-Disaster? Floating Sandbox", game: "Floating Sandbox" },
+  { title: "I Tried to Stop the Titanic From Sinking Using Only Duct Tape! Floating Sandbox", game: "Floating Sandbox" },
+  { title: "The Most Catastrophic Chain Reaction in Floating Sandbox History!", game: "Floating Sandbox" },
+
+  // BESIEGE IDEAS (batch 2)
+  { title: "Can a Plane Survive Flying Through a Tornado? Besiege", game: "Besiege" },
+  { title: "Building the Most Aerodynamic Plane — Then Crashing It! Besiege", game: "Besiege" },
+  { title: "Every Real Life Plane Crash Recreated in Besiege!", game: "Besiege" },
+  { title: "Can a Paper Plane Survive at 10,000 Feet? Besiege", game: "Besiege" },
+  { title: "The Worst Possible Plane Design That Still Flies! Besiege", game: "Besiege" },
+  { title: "I Tried to Land on Every Impossible Surface! Besiege", game: "Besiege" },
+  { title: "Every Engine Failure Scenario — Which is Most Survivable? Besiege", game: "Besiege" },
+  { title: "Can a Plane Survive Flying Upside Down for 10 Minutes? Besiege", game: "Besiege" },
+  { title: "The Most Realistic Emergency Landing Ever! Besiege", game: "Besiege" },
+  { title: "I Tried to Fly With Zero Wings — What Happened? Besiege", game: "Besiege" },
+  { title: "Every Plane vs a Mountain — Which Gets Furthest? Besiege", game: "Besiege" },
+  { title: "Building the World's Heaviest Plane — Then Trying to Fly It! Besiege", game: "Besiege" },
+  { title: "Can a Plane Survive Flying Through an Explosion? Besiege", game: "Besiege" },
+  { title: "I Tried to Land Every Plane With No Landing Gear! Besiege", game: "Besiege" },
+  { title: "The Most Chaotic Multiplayer Plane Crash! Besiege", game: "Besiege" },
+  { title: "Every Plane vs the Same Bridge — What Causes Most Damage? Besiege", game: "Besiege" },
+  { title: "Can a Plane Survive a Head-On Collision at Full Speed? Besiege", game: "Besiege" },
+  { title: "The Slowest Speed You Can Crash a Plane and Survive! Besiege", game: "Besiege" },
+  { title: "I Built a Plane That Could Only Turn Left — Then Flew It! Besiege", game: "Besiege" },
+  { title: "The Most Realistic Engine Fire Simulation! Besiege", game: "Besiege" },
+  { title: "Can a Glider Survive a Hurricane? Besiege", game: "Besiege" },
+  { title: "Every Plane Crash Type Ranked by Survivability! Besiege", game: "Besiege" },
+  { title: "I Tried to Land on a Moving Ship Mid-Ocean! Besiege", game: "Besiege" },
+  { title: "The Biggest Plane vs the Smallest Runway! Besiege", game: "Besiege" },
+  { title: "Can a Biplane Survive a Supersonic Collision? Besiege", game: "Besiege" },
+];
+
+var _sd = JSON.parse(document.getElementById("stateData").textContent);
+var doMoreSet        = new Set(_sd.doMore || []);
+var approvedIdeas    = new Set(_sd.approved || []);
+var trendingApproved = new Set(_sd.trendingApproved || []);
+var planningCards = (_sd.planning && _sd.planning.length) ? _sd.planning : [
+  {id:1,title:"This Week",note:"",priority:"this-week"},
+  {id:2,title:"Coming Soon",note:"",priority:"soon"},
+  {id:3,title:"Backlog Ideas",note:"",priority:"someday"}
+];
+
+var catSearch=""; var catGame="all"; var doMoreOnly=false;
+var ideasSearch=""; var ideasGame="all"; var ideasTab="unapproved";
+
+// ── STOP WORDS ──
+var STOP = new Set(["a","an","the","and","or","but","in","on","at","to","of","vs","with","into","onto","from","for","its","this","that","these","those","is","are","was","were","be","been","being","get","got","it","we","i","my","our","if","then","after","before","during","while","about","over","under","through","against","between","than","more","even","just","so","too","out","up","down","off","by","as","not","no","new","old","big","small","huge","tiny","giant","mini","real","full","entire","whole","inside","within","without","ever","never","always","can","will","what","how","using","only","every","all","most","best","worst","world","biggest","extreme","realistic","amazing","incredible","insane","crazy","epic","ultimate","legendary","unbelievable","impossible","actual","really","very","super","mega","ultra","hyper","do","did","does","has","have","had","would","could","should","let","make","find","try","test","put","see","show","go","going","goes","gone","take","takes","took","come","comes","came","give","gives","gave","hit","hits","use","used","uses","run","runs","ran","one","two","three","four","five","six","x","s","n","e","w","t","challenge","gameplay","game","games","video","videos","mod","mods","simulator","simulation","moments","compilation","destroy","destroys","destroyed","destruction","survive","survives","survived","survival","crash","crashes","crashed","crashing","sink","sinks","sinking","sank","build","builds","building","built","collapse","collapses","collapsing","collapsed","test","tests","testing","tested","win","wins","winning","won","lose","loses","losing","lost","save","saves","saving","saved","escape","escapes","escaping"]);
+
+var TAG={"Teardown":"tag-teardown","Stormworks":"tag-stormworks","Roblox":"tag-roblox","Besiege":"tag-besiege","Minecraft":"tag-minecraft","Floating Sandbox":"tag-floating","BeamNG":"tag-beamng","City Skylines":"tag-city","Planet Coaster":"tag-planet","Algodoo":"tag-algodoo","Other":"tag-other"};
+function getTag(g){return TAG[g]||"tag-other";}
+
+var CATS=[
+  {name:"Teardown",icon:"&#128165;",f:function(g){return g==="Teardown"}},
+  {name:"Stormworks",icon:"&#127754;",f:function(g){return g==="Stormworks"}},
+  {name:"Roblox",icon:"&#127918;",f:function(g){return g==="Roblox"}},
+  {name:"Besiege",icon:"&#9992;",f:function(g){return g==="Besiege"}},
+  {name:"Minecraft",icon:"&#9935;",f:function(g){return g==="Minecraft"}},
+  {name:"Floating Sandbox",icon:"&#128674;",f:function(g){return g==="Floating Sandbox"}},
+  {name:"BeamNG",icon:"&#128667;",f:function(g){return g==="BeamNG"}},
+  {name:"City Skylines",icon:"&#127961;",f:function(g){return g==="City Skylines"}},
+  {name:"Other Games",icon:"&#127919;",f:function(g){return ["Teardown","Stormworks","Roblox","Besiege","Minecraft","Floating Sandbox","BeamNG","City Skylines"].indexOf(g)===-1}}
+];
+
+function saveState(){
+  document.getElementById("stateData").textContent=JSON.stringify({
+    doMore:Array.from(doMoreSet), approved:Array.from(approvedIdeas),
+    trendingApproved:Array.from(trendingApproved), planning:planningCards
+  });
+  if(typeof debouncedCloudSave==="function") debouncedCloudSave();
+}
+
+function hl(text,q){
+  if(!q) return text;
+  var lo=q.toLowerCase(),tlo=text.toLowerCase(),out="",i=0;
+  while(i<text.length){
+    var idx=tlo.indexOf(lo,i);
+    if(idx===-1){out+=text.substring(i);break;}
+    out+=text.substring(i,idx)+"<mark>"+text.substring(idx,idx+lo.length)+"</mark>";
+    i=idx+lo.length;
+  }
+  return out;
+}
+
+function extractKeywords(title){
+  var words=title.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/);
+  var kws=[];
+  for(var i=0;i<words.length;i++){if(words[i].length>=4&&!STOP.has(words[i]))kws.push(words[i]);}
+  return kws;
+}
+
+function getDoMoreKeywords(){
+  var kwSet={};
+  doMoreSet.forEach(function(title){
+    var kws=extractKeywords(title);
+    for(var i=0;i<kws.length;i++) kwSet[kws[i]]=(kwSet[kws[i]]||0)+1;
+  });
+  return kwSet;
+}
+
+function scoreIdea(title,kwMap){
+  var total=Object.keys(kwMap).length;
+  if(total===0) return 0;
+  var words=title.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/);
+  var matched={};
+  for(var i=0;i<words.length;i++){if(kwMap[words[i]]&&!matched[words[i]])matched[words[i]]=true;}
+  var mc=Object.keys(matched).length;
+  if(mc===0) return 0;
+  return Math.min(100,Math.round((mc/total)*100));
+}
+
+function matchBadgeClass(p){return p>=60?"match-badge match-high":p>=30?"match-badge match-mid":"match-badge match-low";}
+
+// ── DUPLICATE DETECTOR ──
+function findDuplicates(){
+  var dups=[];
+  for(var ii=0;ii<IDEAS.length;ii++){
+    var idea=IDEAS[ii];
+    var ideaKws=extractKeywords(idea.title);
+    if(ideaKws.length===0) continue;
+    var bestMatch=null, bestScore=0;
+    for(var ri=0;ri<RAW.length;ri++){
+      var rawKws=extractKeywords(RAW[ri].title);
+      if(rawKws.length===0) continue;
+      var shared=0;
+      for(var ki=0;ki<ideaKws.length;ki++){
+        if(rawKws.indexOf(ideaKws[ki])!==-1) shared++;
+      }
+      var score=Math.round((shared/Math.max(ideaKws.length,rawKws.length))*100);
+      if(score>bestScore){bestScore=score;bestMatch=RAW[ri].title;}
+    }
+    if(bestScore>=55) dups.push({idea:idea.title,match:bestMatch,score:bestScore});
+  }
+  dups.sort(function(a,b){return b.score-a.score;});
+  return dups;
+}
+
+function addBtnListeners(){
+  var btns=document.querySelectorAll("[data-action]");
+  for(var i=0;i<btns.length;i++) btns[i].addEventListener("click",handleBtn);
+}
+function handleBtn(e){
+  var btn=e.currentTarget;
+  var action=btn.getAttribute("data-action");
+  var idx=parseInt(btn.getAttribute("data-idx"),10);
+  if(action==="domore"){
+    var title=RAW[idx].title;
+    if(doMoreSet.has(title)) doMoreSet.delete(title); else doMoreSet.add(title);
+    saveState(); renderCat(); updateHitCount();
+  } else if(action==="approve"){
+    var approvedTitle = IDEAS[idx].title;
+    approvedIdeas.add(approvedTitle);
+    if(ideasTab === "trending"){
+      trendingApproved.add(approvedTitle);
+      saveState();
+      ideasTab = "approved";
+      document.querySelectorAll("[data-ideas-tab]").forEach(function(b){
+        b.classList.remove("active-ideas","active-approved","active-hit","active-trending");
+      });
+      var approvedTabBtn = document.querySelector("[data-ideas-tab='approved']");
+      if(approvedTabBtn) approvedTabBtn.classList.add("active-approved");
+      renderIdeas();
+      var warn = document.getElementById("postingWarning");
+      document.getElementById("postingWarningText").textContent = "Idea approved and marked as trending! Find it in the Approved tab.";
+      warn.style.borderColor = "#4ade80";
+      warn.style.background = "#051a08";
+      warn.querySelector("h4").style.color = "#4ade80";
+      warn.querySelector("h4").textContent = "Approved from Trending";
+      warn.style.display = "block";
+      setTimeout(function(){ warn.style.display = "none"; warn.style.borderColor = "#f59e0b"; warn.style.background = "#1a0a00"; warn.querySelector("h4").style.color = "#f59e0b"; warn.querySelector("h4").textContent = "Posting Gap Warning"; }, 2500);
+    } else {
+      saveState(); renderIdeas();
+      checkPostingGap(approvedTitle);
+    }
+  } else if(action==="unapprove"){
+    approvedIdeas.delete(IDEAS[idx].title);
+    saveState(); renderIdeas();
+  }
+}
+
+function matchGame(g,f){
+  if(f==="all") return true;
+  if(f==="Other") return ["Teardown","Stormworks","Roblox","Besiege","Minecraft","Floating Sandbox","BeamNG","City Skylines"].indexOf(g)===-1;
+  return g===f;
+}
+
+function updateHitCount(){
+  var kwMap=getDoMoreKeywords();
+  var count=0;
+  for(var i=0;i<IDEAS.length;i++){if(scoreIdea(IDEAS[i].title,kwMap)>0)count++;}
+  document.getElementById("hitCount").textContent=count;
+}
+
+// ── RENDER CATALOGUE ──
+function renderCat(){
+  var q=catSearch.toLowerCase(),html="",total=0;
+  for(var ci=0;ci<CATS.length;ci++){
+    var cat=CATS[ci],vids=[];
+    for(var ri=0;ri<RAW.length;ri++){
+      var v=RAW[ri];
+      if(!cat.f(v.game)) continue;
+      if(!matchGame(v.game,catGame)) continue;
+      if(doMoreOnly&&!doMoreSet.has(v.title)) continue;
+      if(q&&v.title.toLowerCase().indexOf(q)===-1) continue;
+      vids.push({v:v,idx:ri});
+    }
+    if(!vids.length) continue;
+    total+=vids.length;
+    html+="<div class='category-section'><div class='category-header'><span class='category-icon'>"+cat.icon+"</span><span class='category-name'>"+cat.name+"</span><span class='category-count'>"+vids.length+"</span></div><div class='video-grid'>";
+    for(var vi=0;vi<vids.length;vi++){
+      var v=vids[vi].v,ri=vids[vi].idx,dm=doMoreSet.has(v.title);
+      html+="<div class='video-card'><span class='card-num'>"+String(vi+1).padStart(2,"0")+"</span><div style='flex:1'><div class='card-title'>"+hl(v.title,q)+"</div><div class='card-badges'><span class='game-tag "+getTag(v.game)+"'>"+v.game+"</span><button class='action-btn btn-domore"+(dm?" on":"")+"' data-action='domore' data-idx='"+ri+"'>"+(dm?"⭐":"☆")+"</button></div></div></div>";
+    }
+    html+="</div></div>";
+  }
+  document.getElementById("catRoot").innerHTML=html;
+  document.getElementById("catShown").textContent=total;
+  document.getElementById("catEmpty").style.display=total===0?"block":"none";
+  addBtnListeners();
+}
+
+// ── RENDER IDEAS ──
+function renderIdeas(){
+  var q=ideasSearch.toLowerCase(),html="",total=0;
+
+  if(ideasTab==="trending"){
+    renderTrending();
+    return;
+  }
+
+  if(ideasTab==="hit"){
+    var kwMap=getDoMoreKeywords();
+    var kwList=Object.keys(kwMap);
+    if(kwList.length===0){
+      document.getElementById("ideasRoot").innerHTML="<div class='empty-state'><span>⭐</span>Star some videos in the Catalogue first — then Hit Ideas will match your best content styles.</div>";
+      document.getElementById("ideasShown").textContent=0;
+      document.getElementById("ideasEmpty").style.display="none";
+      addBtnListeners(); return;
+    }
+    var pillsHtml="";
+    for(var ki=0;ki<kwList.length;ki++) pillsHtml+="<span class='kw-pill'>"+kwList[ki]+"</span>";
+    html+="<div class='keywords-banner'><strong>Keywords from your starred videos:</strong><br>"+pillsHtml+"</div>";
+    var scored=[];
+    for(var i=0;i<IDEAS.length;i++){
+      if(approvedIdeas.has(IDEAS[i].title)) continue;
+      if(!matchGame(IDEAS[i].game,ideasGame)) continue;
+      if(q&&IDEAS[i].title.toLowerCase().indexOf(q)===-1) continue;
+      var pct=scoreIdea(IDEAS[i].title,kwMap);
+      if(pct>0) scored.push({v:IDEAS[i],idx:i,pct:pct});
+    }
+    scored.sort(function(a,b){return b.pct-a.pct;});
+    total=scored.length;
+    if(!scored.length){
+      document.getElementById("ideasRoot").innerHTML="<div class='empty-state'><span>&#128293;</span>No matches yet.</div>";
+      document.getElementById("ideasShown").textContent=0;
+      document.getElementById("ideasEmpty").style.display="none";
+      addBtnListeners(); return;
+    }
+    html+="<div class='category-section hit-section'><div class='category-header hit-header'><span class='category-icon'>&#128293;</span><span class='category-name'>HIT IDEAS</span><span class='category-count'>"+scored.length+"</span></div><div class='video-grid'>";
+    for(var si=0;si<scored.length;si++){
+      var v=scored[si].v,ii=scored[si].idx,pct=scored[si].pct;
+      html+="<div class='video-card hit-card'><span class='card-num'>"+String(si+1).padStart(2,"0")+"</span><div style='flex:1'><div class='card-title'>"+hl(v.title,q)+"</div><div class='card-badges'><span class='game-tag "+getTag(v.game)+"'>"+v.game+"</span><span class='"+matchBadgeClass(pct)+"'>"+pct+"% match</span><button class='action-btn btn-approve' data-action='approve' data-idx='"+ii+"'>&#9989; Approve</button></div></div></div>";
+    }
+    html+="</div></div>";
+  } else {
+    var pool=[];
+    for(var i=0;i<IDEAS.length;i++){
+      var v=IDEAS[i],isApp=approvedIdeas.has(v.title);
+      if(ideasTab==="approved"&&!isApp) continue;
+      if(ideasTab==="unapproved"&&isApp) continue;
+      if(!matchGame(v.game,ideasGame)) continue;
+      if(q&&v.title.toLowerCase().indexOf(q)===-1) continue;
+      pool.push({v:v,idx:i});
+    }
+    var games=[];
+    for(var i=0;i<pool.length;i++){if(games.indexOf(pool[i].v.game)===-1)games.push(pool[i].v.game);}
+    var isApp=(ideasTab==="approved");
+    for(var gi=0;gi<games.length;gi++){
+      var game=games[gi],gvids=[];
+      for(var i=0;i<pool.length;i++){if(pool[i].v.game===game)gvids.push(pool[i]);}
+      if(!gvids.length) continue;
+      total+=gvids.length;
+      var sc=isApp?"category-section approved-section":"category-section ideas-section";
+      var hc=isApp?"category-header approved-header":"category-header ideas-header";
+      var ic=isApp?"&#9989;":"&#128161;";
+      html+="<div class='"+sc+"'><div class='"+hc+"'><span class='category-icon'>"+ic+"</span><span class='category-name'>"+(isApp?"APPROVED":"IDEA")+" - "+game+"</span><span class='category-count'>"+gvids.length+"</span></div><div class='video-grid'>";
+      for(var vi=0;vi<gvids.length;vi++){
+        var v=gvids[vi].v,ii=gvids[vi].idx;
+        var cc=isApp?"video-card approved-card":"video-card idea-card";
+        var tc=isApp?"tag-approved":"tag-idea";
+        var tl=isApp?"✅ Approved":"💡 Idea";
+        var ac=isApp?"action-btn btn-unapprove":"action-btn btn-approve";
+        var at=isApp?"↩ Unapprove":"✅ Approve";
+        var aact=isApp?"unapprove":"approve";
+        var trendBadge=isApp&&trendingApproved.has(v.title)?"<span class='trending-pill'>🚀 Trending</span>":"";
+        html+="<div class='"+cc+"'><span class='card-num'>"+String(vi+1).padStart(2,"0")+"</span><div style='flex:1'><div class='card-title'>"+hl(v.title,q)+"</div><div class='card-badges'><span class='game-tag "+tc+"'>"+tl+"</span>"+trendBadge+"<button class='"+ac+"' data-action='"+aact+"' data-idx='"+ii+"'>"+at+"</button></div></div></div>";
+      }
+      html+="</div></div>";
+    }
+  }
+  document.getElementById("ideasRoot").innerHTML=html;
+  document.getElementById("ideasShown").textContent=total;
+  document.getElementById("ideasApproved").textContent=approvedIdeas.size;
+  document.getElementById("ideasEmpty").style.display=total===0&&ideasTab!=="hit"?"block":"none";
+  addBtnListeners();
+}
+
+// ── TRENDING TAB ──
+// Since we can't make API calls directly, we open search links in new tabs
+// and provide curated trending topic suggestions based on known viral patterns
+var TRENDING_TOPICS = [
+  {topic:"$1 vs $1,000,000", reason:"Extreme comparison format consistently viral in 2025-2026", tags:["comparison","budget","challenge"]},
+  {topic:"Titanic", reason:"Evergreen topic — always trending on YouTube destruction channels", tags:["ship","history","disaster"]},
+  {topic:"Golden Gate Bridge collapse", reason:"Bridge destruction is one of the top performing formats on your channel", tags:["bridge","destruction","physics"]},
+  {topic:"Tsunami vs city", reason:"Natural disaster city destruction is trending heavily in 2026", tags:["tsunami","city","disaster"]},
+  {topic:"Sinking ship survival", reason:"Survival format with large player counts performs extremely well", tags:["survival","ship","multiplayer"]},
+  {topic:"Last one standing wins", reason:"Competition survival format is dominating YouTube right now", tags:["competition","survival","challenge"]},
+  {topic:"Sewage wave", reason:"Your sewage content has a unique viral hook — unusual disaster type", tags:["sewage","unique","destruction"]},
+  {topic:"1000 passengers", reason:"Large number challenges drive clicks — more people = more chaos", tags:["scale","passengers","challenge"]},
+  {topic:"AI destroys city", reason:"AI-themed destruction content spiking in 2026", tags:["AI","city","trending"]},
+  {topic:"Nuclear submarine", reason:"Military disaster content with depth physics performs very well", tags:["submarine","nuclear","disaster"]}
+];
+
+function renderTrending(){
+  var html="<div class='trending-panel'>";
+  html+="<h2>&#128640; What's Trending</h2>";
+  html+="<p>Search current trends on YouTube and Google, then find your best matching ideas below.</p>";
+  html+="<div class='trend-links'>";
+  html+="<a class='trend-link' href='https://trends.google.com/trending?geo=GB' target='_blank'>&#127760; Google Trends UK</a>";
+  html+="<a class='trend-link' href='https://www.youtube.com/feed/trending' target='_blank'>&#127909; YouTube Trending</a>";
+  html+="<a class='trend-link' href='https://trends.google.com/trends/explore?q=tsunami+game&geo=GB' target='_blank'>&#128200; Tsunami Trends</a>";
+  html+="<a class='trend-link' href='https://trends.google.com/trends/explore?q=titanic+game&geo=GB' target='_blank'>&#128200; Titanic Trends</a>";
+  html+="<a class='trend-link' href='https://trends.google.com/trends/explore?q=roblox+disaster&geo=GB' target='_blank'>&#128200; Roblox Disaster Trends</a>";
+  html+="</div></div>";
+
+  html+="<div class='category-section'><div class='category-header'><span class='category-icon'>&#128293;</span><span class='category-name'>TRENDING TOPICS — BEST MATCHING IDEAS</span></div>";
+
+  for(var ti=0;ti<TRENDING_TOPICS.length;ti++){
+    var topic=TRENDING_TOPICS[ti];
+    // Find ideas that match this topic
+    var topicKws=topic.topic.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(w){return w.length>=3&&!STOP.has(w);});
+    topicKws=topicKws.concat(topic.tags);
+    var matches=[];
+    for(var i=0;i<IDEAS.length;i++){
+      if(approvedIdeas.has(IDEAS[i].title)) continue;
+      var title=IDEAS[i].title.toLowerCase();
+      var shared=0;
+      for(var ki=0;ki<topicKws.length;ki++){if(title.indexOf(topicKws[ki])!==-1)shared++;}
+      if(shared>0) matches.push({v:IDEAS[i],idx:i,shared:shared});
+    }
+    matches.sort(function(a,b){return b.shared-a.shared;});
+    var topMatches=matches.slice(0,3);
+
+    html+="<div class='trend-result-card'>";
+    html+="<h3>&#128293; "+topic.topic+"</h3>";
+    html+="<p>"+topic.reason+"</p>";
+    var tagsHtml="";
+    for(var ki=0;ki<topic.tags.length;ki++) tagsHtml+="<span class='trend-tag'>"+topic.tags[ki]+"</span>";
+    html+=tagsHtml;
+    if(topMatches.length){
+      html+="<div style='margin-top:10px;font-size:.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px'>Matching ideas in your list:</div>";
+      html+="<div class='video-grid' style='margin-top:8px'>";
+      for(var mi=0;mi<topMatches.length;mi++){
+        var m=topMatches[mi];
+        html+="<div class='video-card hit-card' style='font-size:.8rem'>";
+        html+="<div style='flex:1'><div class='card-title'>"+m.v.title+"</div>";
+        html+="<div class='card-badges' style='margin-top:5px'><span class='game-tag "+getTag(m.v.game)+"'>"+m.v.game+"</span><button class='action-btn btn-approve' data-action='approve' data-idx='"+m.idx+"'>&#9989; Approve</button></div>";
+        html+="</div></div>";
+      }
+      html+="</div>";
+    } else {
+      html+="<p style='margin-top:8px;color:var(--muted);font-size:.78rem'>No direct matches in your ideas list — consider adding one.</p>";
+    }
+    html+="</div>";
+  }
+  html+="</div>";
+
+  document.getElementById("ideasRoot").innerHTML=html;
+  document.getElementById("ideasShown").textContent="";
+  document.getElementById("ideasEmpty").style.display="none";
+  addBtnListeners();
+}
+
+// ── RENDER PLANNING ──
+function renderPlanning(){
+  var html="";
+  for(var i=0;i<planningCards.length;i++){
+    var c=planningCards[i];
+    var opts=[{v:"this-week",l:"&#128293; This Week"},{v:"soon",l:"&#9889; Coming Soon"},{v:"someday",l:"&#128164; Someday"}];
+    var sel="";
+    for(var oi=0;oi<opts.length;oi++) sel+="<option value='"+opts[oi].v+"'"+(c.priority===opts[oi].v?" selected":"")+">"+opts[oi].l+"</option>";
+    html+="<div class='planning-card' data-cid='"+c.id+"'><div class='planning-card-header'><span>&#128204;</span><h3 contenteditable='true' data-pf='title'>"+c.title+"</h3><select class='priority-select' data-pf='priority'>"+sel+"</select><button class='btn-del' data-pf='delete'>&#10005;</button></div><textarea class='planning-note' data-pf='note' placeholder='Write notes, ideas, scripts...'>"+c.note+"</textarea></div>";
+  }
+  document.getElementById("planningGrid").innerHTML=html;
+  var cards=document.querySelectorAll(".planning-card");
+  for(var i=0;i<cards.length;i++){
+    (function(card){
+      var cid=parseInt(card.getAttribute("data-cid"),10);
+      var title=card.querySelector("[data-pf='title']");
+      var note=card.querySelector("[data-pf='note']");
+      var pri=card.querySelector("[data-pf='priority']");
+      var del=card.querySelector("[data-pf='delete']");
+      title.addEventListener("blur",function(){planningCards.find(function(c){return c.id===cid}).title=title.innerText;saveState();});
+      note.addEventListener("blur",function(){planningCards.find(function(c){return c.id===cid}).note=note.value;saveState();});
+      pri.addEventListener("change",function(){planningCards.find(function(c){return c.id===cid}).priority=pri.value;saveState();renderPlanning();});
+      del.addEventListener("click",function(){planningCards=planningCards.filter(function(c){return c.id!==cid});saveState();renderPlanning();});
+    })(cards[i]);
+  }
+}
+
+// ── DROPDOWN ──
+function setupDropdown(btnId,menuId,labelId,onChange){
+  var btn=document.getElementById(btnId),menu=document.getElementById(menuId);
+  btn.addEventListener("click",function(e){e.stopPropagation();btn.classList.toggle("open");menu.classList.toggle("open");});
+  var opts=menu.querySelectorAll(".game-option");
+  for(var i=0;i<opts.length;i++){
+    opts[i].addEventListener("click",function(){
+      for(var j=0;j<opts.length;j++) opts[j].classList.remove("active");
+      this.classList.add("active");
+      document.getElementById(labelId).textContent=this.textContent;
+      btn.classList.remove("open"); menu.classList.remove("open");
+      onChange(this.getAttribute("data-game"));
+    });
+  }
+  document.addEventListener("click",function(){btn.classList.remove("open");menu.classList.remove("open");});
+}
+
+// ── THREE DOTS MENU ──
+var dotsBtn=document.getElementById("dotsBtn");
+var dotsMenu=document.getElementById("dotsMenu");
+dotsBtn.addEventListener("click",function(e){e.stopPropagation();dotsMenu.classList.toggle("open");});
+document.addEventListener("click",function(){dotsMenu.classList.remove("open");});
+
+// Theme toggle
+var isDark=true;
+document.getElementById("themeToggle").addEventListener("click",function(){
+  isDark=!isDark;
+  document.documentElement.setAttribute("data-theme",isDark?"dark":"light");
+  document.getElementById("themeIcon").textContent=isDark?"&#9728;":"&#9790;";
+  document.getElementById("themeLabel").textContent=isDark?"Light Mode":"Dark Mode";
+  dotsMenu.classList.remove("open");
+});
+
+// Duplicate detector
+document.getElementById("dupCheckBtn").addEventListener("click",function(){
+  dotsMenu.classList.remove("open");
+  var dups=findDuplicates();
+  var list=document.getElementById("dupList");
+  if(!dups.length){
+    list.innerHTML="<li style='color:var(--muted);text-align:center;padding:20px'>&#9989; No significant duplicates found!</li>";
+  } else {
+    var html="";
+    for(var i=0;i<dups.length;i++){
+      html+="<li class='dup-item'><div class='dup-idea'>&#128161; "+dups[i].idea+"</div><div class='dup-match'>&#9888; Similar to: <em>"+dups[i].match+"</em></div><div style='margin-top:4px;font-size:.72rem;color:var(--muted)'>Similarity: "+dups[i].score+"%</div></li>";
+    }
+    list.innerHTML=html;
+  }
+  document.getElementById("dupModal").classList.add("open");
+});
+
+document.getElementById("dupModalClose").addEventListener("click",function(){
+  document.getElementById("dupModal").classList.remove("open");
+});
+document.getElementById("dupModal").addEventListener("click",function(e){
+  if(e.target===this) this.classList.remove("open");
+});
+
+// Export ideas
+document.getElementById("exportBtn").addEventListener("click",function(){
+  dotsMenu.classList.remove("open");
+  var lines=["NEOTASTICS VIDEO IDEAS","=".repeat(40),""];
+  lines.push("APPROVED IDEAS:","");
+  var approvedCount=0;
+  for(var i=0;i<IDEAS.length;i++){
+    if(approvedIdeas.has(IDEAS[i].title)){lines.push("  - "+IDEAS[i].title);approvedCount++;}
+  }
+  if(!approvedCount) lines.push("  (none approved yet)");
+  lines.push("","ALL IDEAS:","");
+  for(var i=0;i<IDEAS.length;i++){
+    if(!approvedIdeas.has(IDEAS[i].title)) lines.push("  - "+IDEAS[i].title);
+  }
+  var blob=new Blob([lines.join("\n")],{type:"text/plain"});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement("a");
+  a.href=url; a.download="neotastics_ideas.txt";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){URL.revokeObjectURL(url)},2000);
+});
+
+// ── WIRE UP ──
+document.querySelectorAll(".page-tab").forEach(function(tab){
+  tab.addEventListener("click",function(){
+    document.querySelectorAll(".page-tab").forEach(function(t){t.classList.remove("active")});
+    document.querySelectorAll(".page-section").forEach(function(s){s.classList.remove("active")});
+    tab.classList.add("active");
+    document.getElementById("page-"+tab.dataset.page).classList.add("active");
+  });
+});
+
+document.getElementById("catSearch").addEventListener("input",function(e){catSearch=e.target.value;renderCat();});
+setupDropdown("catGameBtn","catGameMenu","catGameLabel",function(g){catGame=g;renderCat();});
+document.getElementById("doMoreFilterBtn").addEventListener("click",function(){
+  doMoreOnly=!doMoreOnly;
+  this.classList.toggle("active",doMoreOnly);
+  this.textContent=doMoreOnly?"⭐ Do More (ON)":"⭐ Do More";
+  renderCat();
+});
+
+document.getElementById("ideasSearch").addEventListener("input",function(e){ideasSearch=e.target.value;renderIdeas();});
+setupDropdown("ideasGameBtn","ideasGameMenu","ideasGameLabel",function(g){ideasGame=g;renderIdeas();});
+
+document.querySelectorAll("[data-ideas-tab]").forEach(function(btn){
+  btn.addEventListener("click",function(){
+    document.querySelectorAll("[data-ideas-tab]").forEach(function(b){
+      b.classList.remove("active-ideas","active-approved","active-hit","active-trending");
+    });
+    ideasTab=btn.getAttribute("data-ideas-tab");
+    var cls={unapproved:"active-ideas",approved:"active-approved",hit:"active-hit",trending:"active-trending"};
+    btn.classList.add(cls[ideasTab]||"active-ideas");
+    renderIdeas();
+  });
+});
+
+document.getElementById("addCard").addEventListener("click",function(){
+  planningCards.push({id:Date.now(),title:"New Note",note:"",priority:"someday"});
+  saveState(); renderPlanning();
+});
+
+document.getElementById("saveBtn").addEventListener("click",function(){
+  var btn=document.getElementById("saveBtn");
+  btn.textContent="Saving...";
+  try{
+    saveState();
+    var html=document.documentElement.outerHTML;
+    var blob=new Blob([html],{type:"text/html;charset=utf-8"});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement("a");
+    a.href=url; a.download="neotastics_catalog.html";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){URL.revokeObjectURL(url)},3000);
+    btn.textContent="&#9989; Saved!";
+    setTimeout(function(){btn.textContent="&#128190; Save File"},2000);
+  }catch(err){
+    btn.textContent="Error";
+    setTimeout(function(){btn.textContent="&#128190; Save File"},3000);
+  }
+});
+
+
+// ── CONTENT GAP DETECTOR ──
+var gapTopics = [];
+
+function renderGapTopics(){
+  var html="";
+  for(var i=0;i<gapTopics.length;i++){
+    html+="<span class='competitor-tag' data-idx='"+i+"'>"+gapTopics[i]+"<button onclick='removeGapTopic("+i+")'>x</button></span>";
+  }
+  document.getElementById("gapTopicTags").innerHTML=html;
+}
+
+function removeGapTopic(idx){
+  gapTopics.splice(idx,1);
+  renderGapTopics(); runGapAnalysis();
+}
+
+function runGapAnalysis(){
+  var el=document.getElementById("gapResults");
+  if(!gapTopics.length){
+    el.innerHTML="<p style='color:var(--muted);font-size:.82rem;text-align:center;padding:20px'>Add topics above to analyse your content gaps.</p>";
+    return;
+  }
+  var html="";
+  for(var ti=0;ti<gapTopics.length;ti++){
+    var topic=gapTopics[ti];
+    var tWords=topic.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(w){return w.length>=3;});
+    var covered=[];
+    for(var ri=0;ri<RAW.length;ri++){
+      var t=RAW[ri].title.toLowerCase(), m=0;
+      for(var wi=0;wi<tWords.length;wi++){if(t.indexOf(tWords[wi])!==-1)m++;}
+      if(m>0) covered.push(RAW[ri].title);
+    }
+    var matching=[];
+    for(var ii=0;ii<IDEAS.length;ii++){
+      var t=IDEAS[ii].title.toLowerCase(), m=0;
+      for(var wi=0;wi<tWords.length;wi++){if(t.indexOf(tWords[wi])!==-1)m++;}
+      if(m>0) matching.push({v:IDEAS[ii],idx:ii});
+    }
+    var isCov=covered.length>0;
+    html+="<div class='gap-section'><h3>"+(isCov?"✅":"🔥")+" "+topic.toUpperCase()+"</h3>";
+    html+="<div class='gap-item "+(isCov?"gap-covered":"gap-uncovered")+"'>";
+    html+="<span class='gap-icon'>"+(isCov?"✅":"⚠")+"</span>";
+    html+="<div><div class='gap-text'>"+(isCov?"COVERED":"GAP — NOT COVERED YET")+"</div>";
+    if(isCov) html+="<div class='gap-sub'>Found in "+covered.length+" past video"+(covered.length>1?"s":"")+": <em>"+covered.slice(0,2).join(", ")+(covered.length>2?"...":"")+"</em></div>";
+    else html+="<div class='gap-sub'>No past videos on this topic — opportunity!</div>";
+    html+="</div></div>";
+    if(matching.length){
+      html+="<div style='font-size:.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin:10px 0 6px'>Matching ideas ("+matching.length+"):</div><div class='video-grid'>";
+      for(var mi=0;mi<Math.min(matching.length,4);mi++){
+        var v=matching[mi].v, ii=matching[mi].idx;
+        var alreadyApproved=approvedIdeas.has(v.title);
+        html+="<div class='video-card hit-card' style='font-size:.8rem'><div style='flex:1'><div class='card-title'>"+v.title+"</div>";
+        html+="<div class='card-badges' style='margin-top:5px'><span class='game-tag "+getTag(v.game)+"'>"+v.game+"</span>";
+        if(!alreadyApproved) html+="<button class='action-btn btn-approve' data-action='approve' data-idx='"+ii+"'>✅ Approve</button>";
+        else html+="<span class='game-tag tag-approved'>✅ Approved</span>";
+        html+="</div></div></div>";
+      }
+      if(matching.length>4) html+="<div style='color:var(--muted);font-size:.75rem;padding:10px'>+ "+(matching.length-4)+" more</div>";
+      html+="</div>";
+    } else {
+      html+="<p style='color:var(--muted);font-size:.78rem;margin-top:8px'>No matching ideas — consider adding some.</p>";
+    }
+    html+="</div>";
+  }
+  el.innerHTML=html;
+  addBtnListeners();
+}
+
+document.getElementById("gapAddBtn").addEventListener("click",function(){
+  var input=document.getElementById("gapTopicInput");
+  var val=input.value.trim();
+  if(!val) return;
+  if(gapTopics.indexOf(val)===-1){gapTopics.push(val);renderGapTopics();runGapAnalysis();}
+  input.value="";
+});
+document.getElementById("gapTopicInput").addEventListener("keydown",function(e){
+  if(e.key==="Enter") document.getElementById("gapAddBtn").click();
+});
+document.getElementById("gapCheckBtn").addEventListener("click",function(){
+  document.getElementById("dotsMenu").classList.remove("open");
+  runGapAnalysis();
+  document.getElementById("gapModal").classList.add("open");
+});
+document.getElementById("gapModalClose").addEventListener("click",function(){
+  document.getElementById("gapModal").classList.remove("open");
+});
+document.getElementById("gapModal").addEventListener("click",function(e){
+  if(e.target===this) this.classList.remove("open");
+});
+
+// ── POSTING GAP WARNING ──
+function checkPostingGap(newTitle){
+  var newKws=extractKeywords(newTitle);
+  if(!newKws.length) return;
+  var warnings=[];
+  approvedIdeas.forEach(function(title){
+    if(title===newTitle) return;
+    var kws=extractKeywords(title), shared=0;
+    for(var i=0;i<newKws.length;i++){if(kws.indexOf(newKws[i])!==-1)shared++;}
+    var score=shared>0?Math.round((shared/Math.max(newKws.length,kws.length))*100):0;
+    if(score>=50) warnings.push({title:title,score:score});
+  });
+  var recent=RAW.slice(-10);
+  for(var ri=0;ri<recent.length;ri++){
+    var kws=extractKeywords(recent[ri].title), shared=0;
+    for(var i=0;i<newKws.length;i++){if(kws.indexOf(newKws[i])!==-1)shared++;}
+    var score=shared>0?Math.round((shared/Math.max(newKws.length,kws.length))*100):0;
+    if(score>=55) warnings.push({title:recent[ri].title,score:score,recent:true});
+  }
+  if(!warnings.length) return;
+  warnings.sort(function(a,b){return b.score-a.score;});
+  var best=warnings[0];
+  var msg=best.recent
+    ? '"'+newTitle.substring(0,50)+'..." is '+best.score+'% similar to a recent past video. Consider spacing these out.'
+    : '"'+newTitle.substring(0,50)+'..." is '+best.score+'% similar to another approved idea. Be careful not to post these too close together.';
+  document.getElementById("postingWarningText").textContent=msg;
+  var warn=document.getElementById("postingWarning");
+  warn.style.borderColor="#f59e0b"; warn.style.background="#1a0a00";
+  warn.querySelector("h4").style.color="#f59e0b"; warn.querySelector("h4").textContent="Posting Gap Warning";
+  warn.style.display="block";
+}
+document.getElementById("postingWarningClose").addEventListener("click",function(){
+  document.getElementById("postingWarning").style.display="none";
+});
+
+renderCat();
+renderIdeas();
+renderPlanning();
+updateHitCount();
+</script>
+</body>
+</html>
