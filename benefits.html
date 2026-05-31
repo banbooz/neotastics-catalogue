@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>Benefits of Reinvesting Savings</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#06140d;color:white}.page{min-height:100vh;padding:32px 18px;background:radial-gradient(circle at 50% -10%,rgba(52,211,153,.25),transparent 35%),linear-gradient(135deg,#07140d,#052e16 60%,#020617)}.wrap{max-width:980px;margin:auto}.pill{display:inline-block;padding:9px 14px;border:1px solid #34d39955;border-radius:999px;background:#34d39918;color:#d1fae5}h1{font-size:clamp(38px,7vw,64px);line-height:.95;letter-spacing:-.05em;margin:22px 0 16px}.lead{font-size:18px;line-height:1.65;color:#d1fae5cc;max-width:760px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:26px}.card{border:1px solid #34d39933;background:#ffffff18;border-radius:28px;padding:24px;box-shadow:0 24px 70px #0005;backdrop-filter:blur(16px)}.form{display:grid;gap:18px;margin-top:18px}label{font-weight:900;color:#ecfdf5}.money{position:relative}.money span{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#d1fae5aa}input{width:100%;height:52px;border:1px solid #34d39944;background:#0005;color:white;border-radius:16px;padding-left:34px;font-size:17px}.big{font-size:44px;color:#bef264;font-weight:900;margin:8px 0 18px}.note{color:#d1fae5aa;line-height:1.6}.back{display:inline-block;text-decoration:none;background:#0006;color:#d1fae5;border:1px solid #34d39955;font-weight:900;padding:13px 16px;border-radius:16px;margin-bottom:20px}.foot{text-align:center;color:#d1fae580;margin-top:24px;padding:16px}@media(max-width:760px){.grid{grid-template-columns:1fr}.page{padding:22px 14px}}
+</style>
+</head>
+<body>
+<main class="page"><div class="wrap">
+<a class="back" href="javascript:history.back()">← Back to savings calculator</a>
+<div class="pill">Reinvestment calculator</div>
+<h1>How much extra money could those savings create?</h1>
+<p class="lead">Put in your cost to make one video and average revenue per video. This works out how many extra videos your saved thumbnail money could fund.</p>
+<section class="grid">
+<div class="card"><h2>Video numbers</h2><div class="form"><div><label>Cost to make one video</label><div class="money"><span>$</span><input id="videoCost" type="number" min="1" value="100"></div></div><div><label>Average revenue per video</label><div class="money"><span>$</span><input id="videoRevenue" type="number" min="0" value="250"></div></div></div></div>
+<div class="card"><h2>With your saved thumbnail money</h2><p class="note">Estimated yearly thumbnail savings:</p><div class="big" id="savedMoneyResult">$3,120</div><p class="note">Extra videos you could create:</p><div class="big" id="extraVideosResult">31</div><p class="note">Estimated extra revenue from those videos:</p><div class="big" id="extraRevenueResult">$7,750</div><p class="note" id="profitNote">Estimated revenue minus video production cost: $4,650</p></div>
+</section>
+<div class="foot">This is an estimate. Real results depend on video ideas, retention, upload schedule, production cost and revenue per video.</div>
+</div></main>
+<script>
+const $=id=>document.getElementById(id);const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(n||0);const params=new URLSearchParams(location.search);let saved=Math.max(0,Number(params.get('saved'))||3120);['videoCost','videoRevenue'].forEach(id=>$(id).addEventListener('input',calc));function calc(){let cost=Math.max(1,+$('videoCost').value||1),rev=Math.max(0,+$('videoRevenue').value||0),extra=Math.floor(saved/cost),extraRev=extra*rev,profit=extraRev-(extra*cost);$('savedMoneyResult').textContent=money(saved);$('extraVideosResult').textContent=extra;$('extraRevenueResult').textContent=money(extraRev);$('profitNote').textContent='Estimated revenue minus video production cost: '+money(profit)}calc();
+</script>
+</body>
+</html>
