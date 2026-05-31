@@ -4,7 +4,8 @@ on:
   push:
     branches: [main]
     paths:
-      - 'ai-thumbnail-calculator/**'
+      - 'index.html'
+      - '.nojekyll'
       - '.github/workflows/deploy-ai-thumbnail-calculator.yml'
   workflow_dispatch:
 
@@ -15,41 +16,23 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ai-thumbnail-calculator
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build
-        run: npm run build
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ai-thumbnail-calculator/dist
-
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Upload standalone site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
